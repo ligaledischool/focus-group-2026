@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета участницы — Фокус-группа</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F7F3EE;
+    --warm-white: #FDFAF7;
+    --ink: #1C1815;
+    --ink-soft: #4A3F38;
+    --ink-muted: #8C7B72;
+    --border: #E2D9D0;
+    --border-strong: #C4B5A8;
+    --cat1: #C4677A;
+    --cat1-light: #F9EEF1;
+    --cat1-mid: #E8C5CD;
+    --cat2: #7B6BAE;
+    --cat2-light: #F0EEF8;
+    --cat2-mid: #C9C3E4;
+    --cat3: #4A9B7A;
+    --cat3-light: #EBF5F1;
+    --cat3-mid: #B3D9CA;
+    --cat4: #C47B3A;
+    --cat4-light: #FBF2E8;
+    --cat4-mid: #E6C9A3;
+    --accent: #A0846E;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .page-header {
+    background: var(--ink);
+    padding: 48px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(160,132,110,0.15);
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(196,103,122,0.1);
+  }
+  .header-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: #FDFAF7;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .header-title em { font-style: italic; color: #D4A8A0; }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(253,250,247,0.6);
+    max-width: 480px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  .form-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .section {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label.field-label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 7px;
+    line-height: 1.4;
+  }
+  label.field-label span.req { color: var(--cat1); margin-left: 2px; }
+  .field-hint {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-style: italic;
+    margin-bottom: 7px;
+    margin-top: -4px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #FFFFFF;
+  }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 500px) { .field-row { grid-template-columns: 1fr; } }
+
+  /* Category selection */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  @media (max-width: 540px) { .cat-grid { grid-template-columns: 1fr; } }
+
+  .cat-card {
+    position: relative;
+    cursor: pointer;
+  }
+  .cat-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+  }
+  .cat-card-inner {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    transition: all 0.18s;
+    background: var(--cream);
+    height: 100%;
+  }
+  .cat-card:hover .cat-card-inner { border-color: var(--border-strong); }
+  .cat-card input:checked + .cat-card-inner { background: white; }
+
+  .cat-card[data-cat="1"] input:checked + .cat-card-inner { border-color: var(--cat1); background: var(--cat1-light); }
+  .cat-card[data-cat="2"] input:checked + .cat-card-inner { border-color: var(--cat2); background: var(--cat2-light); }
+  .cat-card[data-cat="3"] input:checked + .cat-card-inner { border-color: var(--cat3); background: var(--cat3-light); }
+  .cat-card[data-cat="4"] input:checked + .cat-card-inner { border-color: var(--cat4); background: var(--cat4-light); }
+
+  .cat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+  .cat-card[data-cat="1"] .cat-dot { background: var(--cat1); }
+  .cat-card[data-cat="2"] .cat-dot { background: var(--cat2); }
+  .cat-card[data-cat="3"] .cat-dot { background: var(--cat3); }
+  .cat-card[data-cat="4"] .cat-dot { background: var(--cat4); }
+
+  .cat-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .cat-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  /* Stress scales */
+  .scale-block { margin-bottom: 16px; }
+  .scale-label { font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 8px; }
+  .scale-wrap { display: flex; align-items: center; gap: 10px; }
+  .scale-end { font-size: 11px; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; max-width: 100px; line-height: 1.3; }
+  .scale-end.right { text-align: right; }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    padding: 0;
+    border: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .scale-val {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Radio / checkbox options */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.12s;
+    background: var(--cream);
+  }
+  .opt:hover { border-color: var(--border-strong); background: white; }
+  .opt input { margin-top: 2px; flex-shrink: 0; cursor: pointer; accent-color: var(--accent); }
+  .opt span { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+  .opt input:checked ~ span { color: var(--ink); }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 500px) { .checkbox-grid { grid-template-columns: 1fr; } }
+
+  /* Color triplet */
+  .color-triplet {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .color-triplet input { text-align: center; }
+
+  /* Conditional sections */
+  .cat-section { display: none; }
+  .cat-section.active { display: block; }
+
+  /* Category header */
+  .cat-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  .cat-section-header[data-cat="1"] { background: var(--cat1-light); border: 0.5px solid var(--cat1-mid); }
+  .cat-section-header[data-cat="2"] { background: var(--cat2-light); border: 0.5px solid var(--cat2-mid); }
+  .cat-section-header[data-cat="3"] { background: var(--cat3-light); border: 0.5px solid var(--cat3-mid); }
+  .cat-section-header[data-cat="4"] { background: var(--cat4-light); border: 0.5px solid var(--cat4-mid); }
+  .cat-section-header .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cat-section-header[data-cat="1"] .dot { background: var(--cat1); }
+  .cat-section-header[data-cat="2"] .dot { background: var(--cat2); }
+  .cat-section-header[data-cat="3"] .dot { background: var(--cat3); }
+  .cat-section-header[data-cat="4"] .dot { background: var(--cat4); }
+  .cat-section-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .cat-section-sub { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+  /* Consent block */
+  .consent-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+  }
+  .consent-block input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+  }
+  .consent-block p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Photo upload hint */
+  .upload-hint {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 13px;
+    background: var(--cream);
+  }
+  .upload-hint strong { display: block; font-size: 14px; color: var(--ink-soft); margin-bottom: 4px; }
+
+  /* Submit */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: var(--cat1);
+    color: var(--warm-white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: 0.02em;
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: #B05568; }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .section-divider {
+    text-align: center;
+    margin: 8px 0 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .inline-fields { display: flex; gap: 10px; }
+  .inline-fields input { flex: 1; }
+
+  input:invalid, textarea:invalid, select:invalid {
+    border-color: var(--border-strong);
+  }
+  input:invalid:not(:placeholder-shown),
+  textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--cat1);
+  }
+  .field-error {
+    font-size: 11.5px;
+    color: var(--cat1);
+    margin-top: 4px;
+    display: none;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-label">Фокус-группа · Виктория Бюргиссер</div>
+  <div class="header-title">Анкета <em>участницы</em></div>
+  <div class="header-sub">Здесь нет правильных ответов. Пиши первое что приходит — честно и без редактуры. Это займёт около 15 минут.</div>
+</div>
+
+<div class="form-container">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <form id="mainForm" novalidate onsubmit="handleSubmit(event)">
+
+    <!-- РАЗДЕЛ 1: ЛИЧНЫЕ ДАННЫЕ -->
+    <div class="section">
+      <div class="section-title">Раздел 1 — Личные данные</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Имя <span class="req">*</span></label>
+          <input type="text" name="firstName" required placeholder="Имя">
+        </div>
+        <div class="field">
+          <label class="field-label">Фамилия <span class="req">*</span></label>
+          <input type="text" name="lastName" required placeholder="Фамилия">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Дата рождения <span class="req">*</span></label>
+        <input type="date" name="dob" required>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Телефон <span class="req">*</span></label>
+        <input type="tel" name="phone" required placeholder="+7 / +41 / +...">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Email <span class="req">*</span></label>
+        <input type="email" name="email" required placeholder="your@email.com">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Telegram <span class="req">*</span></label>
+        <input type="text" name="telegram" required placeholder="@username">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Город / страна проживания</label>
+        <input required type="text" name="city" placeholder="Например: Москва, Россия">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Профессиональная деятельность <span class="req">*</span></label>
+        <div class="field-hint">Чем ты занимаешься — основная деятельность, проект, роль</div>
+        <input type="text" name="profession" required placeholder="Например: коуч, дизайнер, предприниматель, мама...">
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 2: ВЫБОР ТЕМЫ -->
+    <div class="section">
+      <div class="section-title">Раздел 2 — Твоя тема</div>
+
+      <div class="field">
+        <label class="field-label">Прочитай все четыре описания. Выбери то которое резонирует сильнее всего — не «правильно», а то что откликается прямо сейчас. <span class="req">*</span></label>
+        <div class="cat-grid" style="margin-top: 12px;">
+
+          <label class="cat-card" data-cat="1">
+            <input type="radio" name="category" value="1" required onchange="showCategory(1)">
+            <div class="cat-card-inner">
+              <div class="cat-dot"></div>
+              <div class="cat-name">Женственность и её проявления</div>
+              <div class="cat-desc">Что-то живое и женское было — и куда-то ушло. Я больше в роли, чем в себе.</div>
+            </div>
+          </label>
+
+          <label class="cat-card" data-cat="2">
+            <input type="radio" name="category" value="2" onchange="showCategory(2)">
+            <div class="cat-card-inner">
+              <div class="cat-dot"></div>
+              <div class="cat-name">Проявление себя</div>
+              <div class="cat-desc">Знаю, умею, есть что сказать — но заявить об этом вслух что-то останавливает.</div>
+            </div>
+          </label>
+
+          <label class="cat-card" data-cat="3">
+            <input type="radio" name="category" value="3" onchange="showCategory(3)">
+            <div class="cat-card-inner">
+              <div class="cat-dot"></div>
+              <div class="cat-name">Восприятие своего тела</div>
+              <div class="cat-desc">У меня есть условие: сначала изменюсь — потом позволю себе. Я давно в режиме ожидания.</div>
+            </div>
+          </label>
+
+          <label class="cat-card" data-cat="4">
+            <input type="radio" name="category" value="4" onchange="showCategory(4)">
+            <div class="cat-card-inner">
+              <div class="cat-dot"></div>
+              <div class="cat-name">Не отсвечивать</div>
+              <div class="cat-desc">Я намеренно делаю себя незаметной. Когда на меня смотрят — хочется стать меньше.</div>
+            </div>
+          </label>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 3: ШКАЛЫ СТРЕССА -->
+    <div class="section">
+      <div class="section-title">Раздел 3 — Интенсивность</div>
+
+      <div class="scale-block field">
+        <div class="scale-label">Насколько сильно эта тема влияет на твою жизнь прямо сейчас?</div>
+        <div class="scale-wrap">
+          <div class="scale-end">Почти не замечаю</div>
+          <input type="range" name="intensity1" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value; updateProgress()">
+          <div class="scale-val" id="v1">5</div>
+          <div class="scale-end right">Это главное что я чувствую</div>
+        </div>
+      </div>
+
+      <div class="scale-block field">
+        <div class="scale-label">Когда думаешь об этой теме — где в теле ты это чувствуешь и как сильно?</div>
+        <div class="scale-wrap">
+          <div class="scale-end">Нигде</div>
+          <input type="range" name="intensity2" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+          <div class="scale-val" id="v2">5</div>
+          <div class="scale-end right">Очень сильно физически</div>
+        </div>
+      </div>
+
+      <div class="scale-block field">
+        <div class="scale-label">Насколько важно для тебя что-то изменить в этом прямо сейчас?</div>
+        <div class="scale-wrap">
+          <div class="scale-end">Могу подождать</div>
+          <input type="range" name="intensity3" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+          <div class="scale-val" id="v3">5</div>
+          <div class="scale-end right">Больше не могу так</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Опиши в двух-трёх предложениях что происходит в твоей жизни прямо сейчас в связи с этой темой</label>
+        <textarea required name="situation" placeholder="Своими словами, без редактуры..."></textarea>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 4: ОБЩИЕ ВОПРОСЫ -->
+    <div class="section">
+      <div class="section-title">Раздел 4 — Стартовый портрет</div>
+
+      <div class="field">
+        <label class="field-label">Как ты себя чаще всего описываешь другим людям — в двух-трёх словах?</label>
+        <input required type="text" name="selfDesc" placeholder="Первое что приходит...">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Что привело тебя именно сюда, именно сейчас?</label>
+        <textarea required name="whyNow" placeholder="Не думай — пиши..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Что должно измениться через три недели чтобы ты сказала «это сработало»? Опиши конкретно — не ощущение, а что ты будешь делать иначе.</label>
+        <textarea required name="successLooks" placeholder="Конкретное действие или поведение..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Есть ли у тебя ощущение что ты «не такая как надо» — и если да, в чём именно?</label>
+        <textarea required name="notEnough" placeholder="Честно..."></textarea>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 4Б: ВИЗУАЛЬНЫЙ ПОРТРЕТ -->
+    <div class="section">
+      <div class="section-title">Раздел 4Б — Визуальный портрет сейчас</div>
+
+      <div class="field">
+        <label class="field-label">Открой шкаф прямо сейчас (или вспомни). Какие три цвета встречаются чаще всего?</label>
+        <div class="color-triplet">
+          <input required type="text" name="color1" placeholder="Цвет 1">
+          <input required type="text" name="color2" placeholder="Цвет 2">
+          <input required type="text" name="color3" placeholder="Цвет 3">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Есть ли в шкафу вещи которые висят нетронутыми — красивые, но «не для каждого дня»? Что это?</label>
+        <textarea required name="unusedClothes" placeholder="Опиши — что и почему лежит..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Что надеваешь когда нужно чувствовать себя уверенно — важная встреча, сложный разговор?</label>
+        <textarea required name="confidentOutfit" placeholder="Конкретный образ..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Что надеваешь когда никто не видит — дома, в выходной?</label>
+        <textarea required name="homeOutfit" placeholder="Честно..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Есть ли цвета которые хочешь носить но не носишь? Почему?</label>
+        <textarea required name="forbiddenColors" placeholder="Какие цвета и что мешает..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Опиши свою осанку честно — как ты держишь тело среди других людей</label>
+        <div class="options">
+          <label class="opt"><input type="radio" name="posture" value="p1"><span>Плечи вперёд, иду быстро, не замечаю себя</span></label>
+          <label class="opt"><input type="radio" name="posture" value="p2"><span>Сутулюсь, особенно когда устала или тревожусь</span></label>
+          <label class="opt"><input type="radio" name="posture" value="p3"><span>Держусь прямо но это усилие — само не держится</span></label>
+          <label class="opt"><input type="radio" name="posture" value="p4"><span>Чувствую своё тело в движении, получаю от этого удовольствие</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Носишь ли украшения в обычный день?</label>
+        <div class="options">
+          <label class="opt"><input type="radio" name="jewelry" value="j1"><span>Да, каждый день</span></label>
+          <label class="opt"><input type="radio" name="jewelry" value="j2"><span>Иногда, по настроению</span></label>
+          <label class="opt"><input type="radio" name="jewelry" value="j3"><span>Редко — есть но не ношу</span></label>
+          <label class="opt"><input type="radio" name="jewelry" value="j4"><span>Почти никогда / совсем нет</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Есть ли у тебя парфюм который носишь регулярно — для себя, не только на выход?</label>
+        <div class="options">
+          <label class="opt"><input type="radio" name="perfume" value="pf1"><span>Да, каждый день</span></label>
+          <label class="opt"><input type="radio" name="perfume" value="pf2"><span>Только на выход</span></label>
+          <label class="opt"><input type="radio" name="perfume" value="pf3"><span>Редко</span></label>
+          <label class="opt"><input type="radio" name="perfume" value="pf4"><span>Нет</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- УСЛОВНЫЕ РАЗДЕЛЫ ПО КАТЕГОРИЯМ -->
+
+    <!-- КАТЕГОРИЯ 1 -->
+    <div class="cat-section" id="cat-section-1">
+      <div class="section">
+        <div class="cat-section-header" data-cat="1">
+          <div class="dot"></div>
+          <div>
+            <div class="cat-section-name">Женственность и её проявления</div>
+            <div class="cat-section-sub">Вопросы специфические для твоей темы</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Когда ты последний раз чувствовала себя по-настоящему женственной — не красивой для кого-то, а живой внутри как женщина? Опиши этот момент.</label>
+          <textarea required name="c1_lastFeminine" placeholder="Место, что было на тебе, что происходило..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Что по-твоему забрало у тебя эту женственность? Не объясняй — просто назови.</label>
+          <textarea required name="c1_whatTook" placeholder="Первое что пришло..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Есть ли женщина — реальная или из кино, книги — в чьём образе ты видишь то что хочешь вернуть?</label>
+          <textarea required name="c1_roleModel" placeholder="Кто это и что именно в ней..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Если бы твоя женственность была цветом — каким?</label>
+          <div class="field-row">
+            <div>
+              <div class="field-hint">Цвет женственности</div>
+              <input required type="text" name="c1_femColor" placeholder="Какой цвет...">
+            </div>
+            <div>
+              <div class="field-hint">Цвет который носишь сейчас</div>
+              <input required type="text" name="c1_nowColor" placeholder="Что сейчас в гардеробе...">
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Есть ли вещь которую ты никогда не позволяешь себе надеть? Что это и почему именно она?</label>
+          <textarea required name="c1_forbidden" placeholder="Опиши и объясни..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Закончи фразу: «Я позволю себе быть женственной когда...»</label>
+          <input required type="text" name="c1_when" placeholder="Когда...">
+        </div>
+        <div class="field">
+          <label class="field-label">Что ты будешь делать иначе через три недели — конкретно, не ощущение?</label>
+          <textarea required name="c1_result" placeholder="Конкретное действие или поведение..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- КАТЕГОРИЯ 2 -->
+    <div class="cat-section" id="cat-section-2">
+      <div class="section">
+        <div class="cat-section-header" data-cat="2">
+          <div class="dot"></div>
+          <div>
+            <div class="cat-section-name">Проявление себя</div>
+            <div class="cat-section-sub">Вопросы специфические для твоей темы</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Что ты знаешь, умеешь или создала — и пока держишь при себе? Назови конкретно.</label>
+          <textarea required name="c2_hidden" placeholder="Что именно и как давно..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Как давно ты это держишь при себе?</label>
+          <div class="options">
+            <label class="opt"><input type="radio" name="c2_howLong" value="l1"><span>Меньше года</span></label>
+            <label class="opt"><input type="radio" name="c2_howLong" value="l2"><span>1–3 года</span></label>
+            <label class="opt"><input type="radio" name="c2_howLong" value="l3"><span>3–7 лет</span></label>
+            <label class="opt"><input type="radio" name="c2_howLong" value="l4"><span>Больше 7 лет</span></label>
+            <label class="opt"><input type="radio" name="c2_howLong" value="l5"><span>Всегда, сколько себя помню</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Что происходит в теле когда представляешь что говоришь об этом публично? Выбери всё что есть.</label>
+          <div class="checkbox-grid">
+            <label class="opt"><input type="checkbox" name="c2_body" value="chest"><span>Сжимается грудь или живот</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="voice"><span>Голос меняется — тише или напряжённее</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="words"><span>Слова пропадают или путаются</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="disappear"><span>Хочется исчезнуть или уйти</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="blush"><span>Краснею или бросает в жар</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="heart"><span>Учащается сердцебиение</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="heavy"><span>Руки или ноги тяжелеют</span></label>
+            <label class="opt"><input type="checkbox" name="c2_body" value="nothing"><span>Ничего из этого — просто не хочется</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Что самое страшное случится если тебя услышат? Напиши первое что пришло — без цензуры.</label>
+          <textarea required name="c2_fear" placeholder="Первый образ, не мысль..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Было ли время когда ты проявлялась легко? Что тогда было иначе?</label>
+          <textarea required name="c2_before" placeholder="Что изменилось..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Как одеваешься когда нужно говорить о себе или своей работе?</label>
+          <div class="options">
+            <label class="opt"><input type="radio" name="c2_dresscode" value="d1"><span>Примерно так же как всегда — не придаю значения</span></label>
+            <label class="opt"><input type="radio" name="c2_dresscode" value="d2"><span>Стараюсь одеться «получше» но не знаю как именно</span></label>
+            <label class="opt"><input type="radio" name="c2_dresscode" value="d3"><span>Надеваю строгое чтобы выглядеть серьёзно</span></label>
+            <label class="opt"><input type="radio" name="c2_dresscode" value="d4"><span>Тщательно готовлюсь но потом всё равно не уверена</span></label>
+            <label class="opt"><input type="radio" name="c2_dresscode" value="d5"><span>Нахожу образ в котором чувствую себя собой</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Три цвета которые носишь когда нужно «выйти вперёд»</label>
+          <div class="color-triplet">
+            <input required type="text" name="c2_color1" placeholder="Цвет 1">
+            <input required type="text" name="c2_color2" placeholder="Цвет 2">
+            <input required type="text" name="c2_color3" placeholder="Цвет 3">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Закончи фразу: «Я позволю себе заявить о себе когда...»</label>
+          <input required type="text" name="c2_when" placeholder="Когда...">
+        </div>
+      </div>
+    </div>
+
+    <!-- КАТЕГОРИЯ 3 -->
+    <div class="cat-section" id="cat-section-3">
+      <div class="section">
+        <div class="cat-section-header" data-cat="3">
+          <div class="dot"></div>
+          <div>
+            <div class="cat-section-name">Восприятие своего тела</div>
+            <div class="cat-section-sub">Вопросы специфические для твоей темы</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Назови условие после которого ты позволишь себе одеваться / выглядеть / появляться так как хочешь.</label>
+          <input required type="text" name="c3_condition" placeholder="Когда...">
+        </div>
+        <div class="field">
+          <label class="field-label">Сколько лет ты уже ждёшь этого момента?</label>
+          <input required type="text" name="c3_years" placeholder="Напиши цифру или «не считала»">
+        </div>
+        <div class="field">
+          <label class="field-label">Какие части тела ты прячешь в одежде каждый день? Выбери все.</label>
+          <div class="checkbox-grid">
+            <label class="opt"><input type="checkbox" name="c3_hide" value="belly"><span>Живот</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="arms"><span>Руки / плечи</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="hips"><span>Бёдра / ягодицы</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="legs"><span>Ноги</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="chest"><span>Грудь</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="neck"><span>Шею / декольте</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="none"><span>Ничего намеренно не прячу</span></label>
+            <label class="opt"><input type="checkbox" name="c3_hide" value="all"><span>Прячу всё тело в целом</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Что происходит когда смотришь на себя в зеркало в полный рост?</label>
+          <div class="options">
+            <label class="opt"><input type="radio" name="c3_mirror" value="m1"><span>Не смотрю — избегаю</span></label>
+            <label class="opt"><input type="radio" name="c3_mirror" value="m2"><span>Смотрю но сразу вижу что не так</span></label>
+            <label class="opt"><input type="radio" name="c3_mirror" value="m3"><span>Нейтрально — просто факт</span></label>
+            <label class="opt"><input type="radio" name="c3_mirror" value="m4"><span>В целом принимаю, есть зоны с которыми сложно</span></label>
+            <label class="opt"><input type="radio" name="c3_mirror" value="m5"><span>Смотрю с теплотой — даже когда не в лучшей форме</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Какой силуэт чаще всего? Выбери все что есть.</label>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="c3_silhouette" value="s1"><span>Оверсайз — широкое, скрывающее форму</span></label>
+            <label class="opt"><input type="checkbox" name="c3_silhouette" value="s2"><span>Тёмные цвета снизу чтобы «спрятать»</span></label>
+            <label class="opt"><input type="checkbox" name="c3_silhouette" value="s3"><span>Слои — кардиган или пиджак поверх всего</span></label>
+            <label class="opt"><input type="checkbox" name="c3_silhouette" value="s4"><span>Только мягкие ткани — чтобы не давило</span></label>
+            <label class="opt"><input type="checkbox" name="c3_silhouette" value="s5"><span>Ношу то что нравится независимо от формы</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Опиши образ в котором чувствуешь себя лучше всего — даже если никогда не надеваешь его.</label>
+          <textarea required name="c3_dream" placeholder="Ткань, цвет, силуэт, детали..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Назови одну вещь или образ который хочешь прямо сейчас но запрещаешь себе.</label>
+          <textarea required name="c3_want" placeholder="Будь честна..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Закончи фразу: «Моё тело мешает мне...»</label>
+          <input required type="text" name="c3_bodyBlocks" placeholder="...">
+        </div>
+      </div>
+    </div>
+
+    <!-- КАТЕГОРИЯ 4 -->
+    <div class="cat-section" id="cat-section-4">
+      <div class="section">
+        <div class="cat-section-header" data-cat="4">
+          <div class="dot"></div>
+          <div>
+            <div class="cat-section-name">Не отсвечивать</div>
+            <div class="cat-section-sub">Вопросы специфические для твоей темы</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">В каких конкретных ситуациях ты хочешь стать невидимой? Назови три.</label>
+          <input required type="text" name="c4_sit1" placeholder="Ситуация 1" style="margin-bottom:8px">
+          <input required type="text" name="c4_sit2" placeholder="Ситуация 2" style="margin-bottom:8px">
+          <input required type="text" name="c4_sit3" placeholder="Ситуация 3">
+        </div>
+        <div class="field">
+          <label class="field-label">Что самое страшное случится если тебя заметят? Напиши первое что пришло — без редактуры.</label>
+          <textarea required name="c4_fear" placeholder="Первый образ..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Как одеваешься чтобы не выделяться? Выбери всё что есть.</label>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s1"><span>Только нейтральные цвета — серый, бежевый, чёрный</span></label>
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s2"><span>Никаких ярких деталей или украшений</span></label>
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s3"><span>Всё широкое — ничего облегающего</span></label>
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s4"><span>Одеваюсь как все — чтобы не выделяться</span></label>
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s5"><span>Убираю волосы, минимум макияжа</span></label>
+            <label class="opt"><input type="checkbox" name="c4_strategy" value="s6"><span>Принципиально не покупаю красивое — «не для меня»</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Три цвета которые носишь прямо сейчас</label>
+          <div class="color-triplet">
+            <input required type="text" name="c4_color1" placeholder="Цвет 1">
+            <input required type="text" name="c4_color2" placeholder="Цвет 2">
+            <input required type="text" name="c4_color3" placeholder="Цвет 3">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Есть ли в шкафу «слишком яркая» или «слишком красивая» вещь которая висит нетронутой?</label>
+          <div class="options">
+            <label class="opt"><input type="radio" name="c4_bright" value="b1"><span>Да, и не одна</span></label>
+            <label class="opt"><input type="radio" name="c4_bright" value="b2"><span>Есть одна-две — ещё не пришёл момент</span></label>
+            <label class="opt"><input type="radio" name="c4_bright" value="b3"><span>Нет, я не покупаю такое</span></label>
+            <label class="opt"><input type="radio" name="c4_bright" value="b4"><span>Было, но раздала или выбросила</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Если бы никто никогда тебя не увидел — как бы ты оделась завтра? Без цензуры.</label>
+          <textarea required name="c4_dream" placeholder="Образ мечты без ограничений..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Было ли время когда ты легко занимала пространство? Что изменилось?</label>
+          <textarea required name="c4_before" placeholder="Когда это было и что произошло..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Насколько намеренно ты делаешь себя незаметной прямо сейчас?</label>
+          <div class="scale-wrap" style="margin-top:8px">
+            <div class="scale-end">Совсем нет</div>
+            <input type="range" name="c4_invisible" min="1" max="10" value="6" oninput="document.getElementById('v4').textContent=this.value">
+            <div class="scale-val" id="v4">6</div>
+            <div class="scale-end right">Постоянно, это моя стратегия</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Закончи фразу: «Я позволю себе быть заметной когда...»</label>
+          <input required type="text" name="c4_when" placeholder="Когда...">
+        </div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 5: ФИНАЛ -->
+    <div class="section">
+      <div class="section-title">Раздел 5 — Финал</div>
+
+      <div class="field">
+        <label class="field-label">Было ли у тебя раньше что-то похожее на трансформационную работу — коучинг, психология, телесные практики? Что это было и что дало?</label>
+        <textarea required name="prevWork" placeholder="Опиши опыт..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Есть ли что-то важное о себе что ты хочешь чтобы я знала до нашей первой встречи?</label>
+        <textarea required name="important" placeholder="Всё что считаешь нужным..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label" style="margin-bottom:12px">Согласие на участие <span class="req">*</span></label>
+        <div class="consent-block">
+          <input type="checkbox" name="consent1" id="consent1" required>
+          <p>Я подтверждаю что дала согласие на участие в фокус-группе и на использование материалов моей трансформации. Виктория обязуется использовать мою историю максимально точно и с уважением к моей личности.</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" style="margin-bottom:12px">Использование материалов до/после <span class="req">*</span></label>
+        <div class="options">
+          <label class="opt"><input type="radio" name="consent2" value="with_name" required><span>Даю согласие на использование материалов <strong>с моим именем</strong>. Доверяю Виктории использовать их точно и с уважением.</span></label>
+          <label class="opt"><input type="radio" name="consent2" value="anonymous"><span>Даю согласие на использование материалов <strong>анонимно</strong>.</span></label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Отправить анкету →</button>
+
+  </form>
+</div>
+
+<script>
+function showCategory(n) {
+  document.querySelectorAll('.cat-section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('cat-section-' + n);
+  if (el) {
+    el.classList.add('active');
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const form = document.getElementById('mainForm');
+  const required = form.querySelectorAll('[required]');
+  let filled = 0;
+  required.forEach(el => {
+    if (el.type === 'checkbox' && el.checked) filled++;
+    else if (el.type === 'radio') {
+      const group = form.querySelectorAll(`[name="${el.name}"]:checked`);
+      if (group.length > 0) filled++;
+    }
+    else if (el.value && el.value.trim()) filled++;
+  });
+  // Deduplicate radio groups
+  const radioGroups = new Set();
+  let radioTotal = 0;
+  required.forEach(el => {
+    if (el.type === 'radio' && !radioGroups.has(el.name)) {
+      radioGroups.add(el.name);
+      radioTotal++;
+    }
+  });
+  const checkboxes = Array.from(required).filter(el => el.type === 'checkbox').length;
+  const texts = Array.from(required).filter(el => el.type !== 'radio' && el.type !== 'checkbox').length;
+  const total = radioTotal + checkboxes + texts;
+  const pct = Math.min(100, Math.round((filled / Math.max(total, 1)) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5JLL3po_XxbH-xDv78ER39PVfCjQou8AJhKYCpHv_5g7wV4cFcXi7FVnMnTgSIpwxTg/exec';
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+
+  // Custom validation
+  const requiredFields = form.querySelectorAll('[required]');
+  let firstInvalid = null;
+  let hasError = false;
+
+  requiredFields.forEach(el => {
+    const isRadioGroup = el.type === 'radio';
+    if (isRadioGroup) {
+      const group = form.querySelectorAll(`[name="${el.name}"]:checked`);
+      if (group.length === 0) {
+        hasError = true;
+        if (!firstInvalid) firstInvalid = el;
+        el.closest('.options, .cat-grid') && el.closest('.options, .cat-grid').style.setProperty('outline', '2px solid var(--cat1)', 'important');
+      }
+    } else if (el.type === 'checkbox' && el.required && !el.checked) {
+      hasError = true;
+      if (!firstInvalid) firstInvalid = el;
+      el.closest('.consent-block').style.outline = '2px solid var(--cat1)';
+    } else if (!isRadioGroup && !el.value.trim()) {
+      hasError = true;
+      if (!firstInvalid) firstInvalid = el;
+      el.style.borderColor = 'var(--cat1)';
+    }
+  });
+
+  if (hasError) {
+    if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const btn = form.querySelector('.submit-btn');
+    btn.textContent = 'Заполни все обязательные поля →';
+    setTimeout(() => { btn.textContent = 'Отправить анкету →'; }, 3000);
+    return;
+  }
+
+  const data = new FormData(form);
+  const obj = {};
+  for (let [k, v] of data.entries()) {
+    if (obj[k]) {
+      obj[k] = Array.isArray(obj[k]) ? [...obj[k], v] : [obj[k], v];
+    } else {
+      obj[k] = v;
+    }
+  }
+
+  // Show sending state
+  const btn = form.querySelector('.submit-btn');
+  if (btn) { btn.textContent = 'Отправляю...'; btn.disabled = true; }
+
+  // Build GET params — flatten arrays with comma
+  const params = new URLSearchParams();
+  params.set('participant', (obj.firstName || '') + ' ' + (obj.lastName || ''));
+  params.set('section', 'QUESTIONNAIRE');
+  Object.entries(obj).forEach(([k, v]) => {
+    params.set(k, Array.isArray(v) ? v.join(', ') : v);
+  });
+
+  // Send via image trick (bypasses CORS)
+  const img = new Image();
+  img.onload = img.onerror = function() {
+    form.innerHTML = `
+      <div style="text-align:center;padding:60px 20px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:#1C1815;margin-bottom:12px;">Спасибо</div>
+        <div style="font-size:15px;color:#8C7B72;line-height:1.7;max-width:380px;margin:0 auto;">
+          Спасибо за заполнение анкеты. Жду тебя на нашей сессии PWS!
+        </div>
+        <div style="margin-top:32px;font-size:13px;color:#C4B5A8;font-style:italic;font-family:'Cormorant Garamond',serif;">
+          Код проявленности · Фокус-группа 2026
+        </div>
+      </div>
+    `;
+  };
+  img.src = SCRIPT_URL + '?' + params.toString();
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', updateProgress);
+  el.addEventListener('change', updateProgress);
+});
+updateProgress();
+</script>
+</body>
+</html>
