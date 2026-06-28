@@ -482,10 +482,10 @@
 
     <!-- РАЗДЕЛ 2: ВЫБОР ТЕМЫ -->
     <div class="section">
-      <div class="section-title">Раздел 2 — Твоя тема</div>
+      <div class="section-title">Раздел 2 — Подтверди свою тему</div>
 
       <div class="field">
-        <label class="field-label">Прочитай все четыре описания. Выбери то которое резонирует сильнее всего — не «правильно», а то что откликается прямо сейчас. <span class="req">*</span></label>
+        <label class="field-label">Мы уже определили твою тему вместе. Найди её описание ниже и подтверди — это важно для нашей работы. <span class="req">*</span></label>
         <div class="cat-grid" style="margin-top: 12px;">
 
           <label class="cat-card" data-cat="1">
@@ -963,7 +963,7 @@ function showCategory(n) {
   const el = document.getElementById('cat-section-' + n);
   if (el) {
     el.classList.add('active');
-    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    // No auto-scroll — user continues naturally
   }
   updateProgress();
 }
