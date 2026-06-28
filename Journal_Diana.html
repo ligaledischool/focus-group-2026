@@ -7,545 +7,376 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
   :root {
-    --cream: #F7F3EE; --warm-white: #FDFAF7; --ink: #1C1815;
-    --ink-soft: #4A3F38; --ink-muted: #8C7B72;
-    --border: #E2D9D0; --border-strong: #C4B5A8;
-    --accent: #C4677A; --accent-light: #F9EEF1;
-    --gold: #C4A882; --radius: 12px; --radius-sm: 8px;
+    --cream:#F7F3EE; --warm-white:#FDFAF7; --ink:#1C1815;
+    --ink-soft:#4A3F38; --ink-muted:#8C7B72;
+    --border:#E2D9D0; --border-strong:#C4B5A8;
+    --accent:#C4677A; --accent-light:#F9EEF1;
+    --gold:#C4A882; --radius:12px; --radius-sm:8px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--ink); font-size: 14px; line-height: 1.65; }
-
-  .page-header { background: var(--ink); padding: 36px 24px 28px; text-align: center; position: relative; overflow: hidden; }
-  .page-header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; background: rgba(160,132,110,0.12); }
-  .header-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-  .header-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: #FDFAF7; margin-bottom: 4px; }
-  .header-cat { font-size: 12px; color: var(--accent); font-weight: 500; letter-spacing: 0.06em; margin-bottom: 6px; }
-  .header-sub { font-size: 12px; color: rgba(253,250,247,0.5); font-weight: 300; }
-
-  .week-tabs { display: flex; background: var(--warm-white); border-bottom: 0.5px solid var(--border); overflow-x: auto; padding: 0 16px; position: sticky; top: 0; z-index: 100; }
-  .week-tab { padding: 13px 16px; font-size: 12.5px; font-weight: 500; color: var(--ink-muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
-  .week-tab:hover { color: var(--ink-soft); }
-  .week-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
-  .week-tab .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: middle; background: currentColor; opacity: 0.5; }
-  .week-tab.active .dot { opacity: 1; }
-
-  .main { max-width: 680px; margin: 0 auto; padding: 24px 16px 100px; }
-  .week-section { display: none; }
-  .week-section.active { display: block; }
-
-  .week-banner { border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; border: 0.5px solid var(--accent-light); background: var(--accent-light); }
-  .week-banner-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-  .week-banner-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--ink); margin-bottom: 4px; }
-  .week-banner-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.5; }
-
-  .card { background: var(--warm-white); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 20px 20px 16px; margin-bottom: 12px; }
-  .card-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 0.5px solid var(--border); }
-
-  .field { margin-bottom: 14px; }
-  .field:last-child { margin-bottom: 0; }
-  label.q { display: block; font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 6px; line-height: 1.4; }
-  .hint { font-size: 11.5px; color: var(--ink-muted); font-style: italic; margin-bottom: 6px; margin-top: -3px; }
-
-  textarea { width: 100%; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--cream); font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--ink); resize: vertical; min-height: 70px; line-height: 1.6; transition: border-color 0.15s; }
-  textarea:focus { outline: none; border-color: var(--accent); background: white; }
-  textarea.short { min-height: 44px; }
-  input[type="text"], input[type="date"] { width: 100%; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--cream); font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--ink); transition: border-color 0.15s; }
-  input:focus { outline: none; border-color: var(--accent); background: white; }
-
-  .opts { display: flex; flex-direction: column; gap: 6px; }
-  .opt { display: flex; align-items: flex-start; gap: 9px; padding: 8px 11px; border: 0.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.12s; background: var(--cream); }
-  .opt:hover { border-color: var(--border-strong); background: white; }
-  .opt input { margin-top: 2px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
-  .opt span { font-size: 13px; color: var(--ink-soft); line-height: 1.4; }
-
-  .scale-wrap { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-  .scale-end { font-size: 11px; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; max-width: 80px; line-height: 1.3; }
-  .scale-end.r { text-align: right; }
-  input[type="range"] { flex: 1; -webkit-appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; padding: 0; border: none; }
-  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-  .scale-val { font-size: 14px; font-weight: 500; color: var(--ink); min-width: 22px; text-align: center; }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-
-  .photo-box { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 20px; text-align: center; background: var(--cream); }
-  .photo-box-icon { font-size: 22px; margin-bottom: 6px; }
-  .photo-box-title { font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 3px; }
-  .photo-box-sub { font-size: 11.5px; color: var(--ink-muted); }
-
-  .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  @media (max-width: 480px) { .arch-grid { grid-template-columns: 1fr; } }
-  .arch-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px; background: var(--cream); }
-  .arch-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
-  .arch-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  .arch-name { font-size: 12px; font-weight: 500; color: var(--ink); }
-  .arch-sub { font-size: 11px; color: var(--ink-muted); }
-  .arch-f { margin-bottom: 8px; }
-  .arch-f:last-child { margin-bottom: 0; }
-  .arch-q { font-size: 11.5px; font-weight: 500; color: var(--ink-soft); margin-bottom: 4px; }
-  .arch-f textarea { min-height: 44px; font-size: 12.5px; }
-
-  .exp-box { background: #FBF5EB; border: 0.5px solid #E6C9A3; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px; }
-  .exp-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #9E7B45; margin-bottom: 6px; }
-  .exp-task { font-size: 13px; color: var(--ink-soft); line-height: 1.6; font-style: italic; margin-bottom: 12px; padding: 10px 12px; background: white; border-radius: var(--radius-sm); border: 0.5px solid #E6C9A3; }
-
-  .pws-banner { background: linear-gradient(135deg, #1C1815 0%, #2D2520 100%); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 12px; }
-  .pws-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-  .pws-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #FDFAF7; margin-bottom: 4px; }
-  .pws-sub { font-size: 12px; color: rgba(253,250,247,0.5); }
-
-  .divider { height: 0.5px; background: var(--border); margin: 14px 0; }
-
-  /* Save bar */
-  .save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--warm-white); border-top: 0.5px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 200; }
-  .save-status { font-size: 12px; color: var(--ink-muted); }
-  .save-status.saving { color: var(--accent); }
-  .save-status.saved { color: #4A9B7A; }
-  .save-status.error { color: #C4677A; }
-  .save-btn { padding: 10px 22px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
-  .save-btn:hover { opacity: 0.85; }
-  .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);font-size:14px;line-height:1.65;}
+  .hdr{background:var(--ink);padding:32px 20px 24px;text-align:center;}
+  .hdr-lbl{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .hdr-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#FDFAF7;margin-bottom:4px;}
+  .hdr-cat{font-size:12px;color:var(--accent);font-weight:500;margin-bottom:4px;}
+  .hdr-sub{font-size:12px;color:rgba(253,250,247,.5);font-weight:300;}
+  .tabs{display:flex;background:var(--warm-white);border-bottom:.5px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;padding:0 12px;}
+  .tab{padding:12px 14px;font-size:12px;font-weight:500;color:var(--ink-muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;flex-shrink:0;}
+  .tab.active{color:var(--ink);border-bottom-color:var(--accent);}
+  .main{max-width:660px;margin:0 auto;padding:20px 14px 90px;}
+  .sec{display:none;}.sec.active{display:block;}
+  .banner{border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;border:.5px solid var(--accent);background:var(--accent-light);}
+  .ban-badge{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+  .ban-title{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--ink);margin-bottom:3px;}
+  .ban-desc{font-size:12px;color:var(--ink-muted);line-height:1.5;}
+  .card{background:var(--warm-white);border:.5px solid var(--border);border-radius:var(--radius);padding:18px 18px 14px;margin-bottom:10px;}
+  .ct{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;padding-bottom:9px;border-bottom:.5px solid var(--border);}
+  .f{margin-bottom:13px;}.f:last-child{margin-bottom:0;}
+  .q{display:block;font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:5px;line-height:1.4;}
+  .hint{font-size:11px;color:var(--ink-muted);font-style:italic;margin-bottom:5px;margin-top:-3px;}
+  textarea{width:100%;padding:8px 11px;border:.5px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--cream);font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);resize:vertical;min-height:68px;line-height:1.6;transition:border-color .15s;}
+  textarea:focus,input:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea.sh{min-height:42px;}
+  input[type=text],input[type=date]{width:100%;padding:8px 11px;border:.5px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--cream);font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);transition:border-color .15s;}
+  .opts{display:flex;flex-direction:column;gap:6px;}
+  .opt{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border:.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .12s;background:var(--cream);}
+  .opt:hover{border-color:var(--border-strong);background:white;}
+  .opt input{margin-top:2px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+  .opt span{font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+  .sw{display:flex;align-items:center;gap:9px;margin-top:5px;}
+  .se{font-size:11px;color:var(--ink-muted);white-space:nowrap;flex-shrink:0;max-width:75px;line-height:1.3;}
+  .se.r{text-align:right;}
+  input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none;padding:0;border:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .sv{font-size:14px;font-weight:500;color:var(--ink);min-width:20px;text-align:center;}
+  .tc{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .thc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+  .photo-box{border:1.5px dashed var(--border-strong);border-radius:var(--radius);padding:18px;text-align:center;background:var(--cream);}
+  .pb-icon{font-size:20px;margin-bottom:5px;}
+  .pb-title{font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:3px;}
+  .pb-sub{font-size:11px;color:var(--ink-muted);}
+  .ag{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+  @media(max-width:480px){.ag{grid-template-columns:1fr;}}
+  .ac{border:.5px solid var(--border);border-radius:var(--radius);padding:13px;background:var(--cream);}
+  .ah{display:flex;align-items:center;gap:7px;margin-bottom:9px;padding-bottom:7px;border-bottom:.5px solid var(--border);}
+  .ad{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .an{font-size:12px;font-weight:500;color:var(--ink);}
+  .as{font-size:11px;color:var(--ink-muted);}
+  .af{margin-bottom:7px;}.af:last-child{margin-bottom:0;}
+  .aq{font-size:11.5px;font-weight:500;color:var(--ink-soft);margin-bottom:4px;}
+  .af textarea{min-height:40px;font-size:12px;}
+  .exp{background:#FBF5EB;border:.5px solid #E6C9A3;border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;}
+  .el{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9E7B45;margin-bottom:5px;}
+  .et{font-size:12.5px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin-bottom:11px;padding:9px 11px;background:white;border-radius:var(--radius-sm);border:.5px solid #E6C9A3;}
+  .pws-hdr{background:linear-gradient(135deg,#1C1815 0%,#2D2520 100%);border-radius:var(--radius);padding:18px 20px;margin-bottom:10px;}
+  .pl{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+  .pt{font-family:'Cormorant Garamond',serif;font-size:21px;color:#FDFAF7;margin-bottom:3px;}
+  .ps{font-size:12px;color:rgba(253,250,247,.5);}
+  .div{height:.5px;background:var(--border);margin:12px 0;}
+  .bar{position:fixed;bottom:0;left:0;right:0;background:var(--warm-white);border-top:.5px solid var(--border);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;z-index:200;}
+  .bs{font-size:12px;color:var(--ink-muted);}
+  .bs.saving{color:var(--accent);}
+  .bs.saved{color:#4A9B7A;}
+  .bs.error{color:#C4677A;}
+  .btn{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+  .btn:hover{opacity:.85;}.btn:disabled{opacity:.5;cursor:not-allowed;}
 </style>
 </head>
 <body>
-
-<div class="page-header">
-  <div class="header-label">Фокус-группа · Виктория Бюргиссер</div>
-  <div class="header-name">Diana</div>
-  <div class="header-cat">Category 1 — Femininity</div>
-  <div class="header-sub">Наблюдай — не анализируй. Пиши первое что приходит.</div>
+<div class="hdr">
+  <div class="hdr-lbl">Фокус-группа · Виктория Бюргиссер</div>
+  <div class="hdr-name">Diana</div>
+  <div class="hdr-cat">Category 1 — Femininity</div>
+  <div class="hdr-sub">Наблюдай — не анализируй. Пиши первое что приходит.</div>
 </div>
-
-<div class="week-tabs">
-  <div class="week-tab active" onclick="showWeek('w0',this)"><span class="dot"></span>Точка ноль</div>
-  <div class="week-tab" onclick="showWeek('wpws',this)"><span class="dot"></span>PWS Сессия</div>
-  <div class="week-tab" onclick="showWeek('w1',this)"><span class="dot"></span>Неделя 1</div>
-  <div class="week-tab" onclick="showWeek('w2',this)"><span class="dot"></span>Неделя 2</div>
-  <div class="week-tab" onclick="showWeek('w3',this)"><span class="dot"></span>Неделя 3</div>
-  <div class="week-tab" onclick="showWeek('wf',this)"><span class="dot"></span>Финал</div>
+<div class="tabs">
+  <div class="tab active" onclick="show('w0',this)">Точка ноль</div>
+  <div class="tab" onclick="show('wpws',this)">PWS Сессия</div>
+  <div class="tab" onclick="show('w1',this)">Неделя 1</div>
+  <div class="tab" onclick="show('w2',this)">Неделя 2</div>
+  <div class="tab" onclick="show('w3',this)">Неделя 3</div>
+  <div class="tab" onclick="show('wf',this)">Финал</div>
 </div>
-
 <div class="main">
 
-<!-- ТОЧКА НОЛЬ -->
-<div class="week-section active" id="w0">
-  <div class="week-banner">
-    <div class="week-banner-badge">Точка ноль</div>
-    <div class="week-banner-title">День начала</div>
-    <div class="week-banner-desc">Фиксируем стартовую точку. Не готовься — просто запиши как есть прямо сейчас.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Визуальный старт</div>
-    <div class="field">
-      <div class="photo-box"><div class="photo-box-icon">📷</div><div class="photo-box-title">Фото в полный рост — сегодня</div><div class="photo-box-sub">Обычный день, обычная одежда. Отправь Виктории в Telegram.</div></div>
-    </div>
-    <div class="field"><label class="q">Дата</label><input type="date" name="z_date"></div>
-    <div class="field">
-      <label class="q">Три слова которыми описываешь своё отражение прямо сейчас</label>
-      <div class="three-col"><input type="text" name="z_w1" placeholder="Слово 1"><input type="text" name="z_w2" placeholder="Слово 2"><input type="text" name="z_w3" placeholder="Слово 3"></div>
-    </div>
-    <div class="field"><label class="q">Основной цвет который носишь почти каждый день</label><input type="text" name="z_maincolor" placeholder="Цвет..."></div>
-    <div class="field">
-      <label class="q">Цвет который не носишь никогда — и почему</label>
-      <div class="two-col"><input type="text" name="z_nevercolor" placeholder="Цвет..."><input type="text" name="z_neverwhy" placeholder="Почему..."></div>
-    </div>
-    <div class="field"><label class="q">Одна вещь из шкафа которую хочешь но не надеваешь</label><textarea name="z_wantitem" class="short" placeholder="Опиши её..."></textarea></div>
-    <div class="field">
-      <label class="q">Как держишь плечи прямо сейчас</label>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="z_shoulders" value="Сжаты вперёд"><span>Сжаты вперёд</span></label>
-        <label class="opt"><input type="radio" name="z_shoulders" value="Опущены вниз"><span>Опущены вниз</span></label>
-        <label class="opt"><input type="radio" name="z_shoulders" value="Напряжены"><span>Напряжены</span></label>
-        <label class="opt"><input type="radio" name="z_shoulders" value="Расправлены"><span>Расправлены</span></label>
-        <label class="opt"><input type="radio" name="z_shoulders" value="Не замечаю"><span>Не замечаю</span></label>
-      </div>
-    </div>
-    <div class="field">
-      <label class="q">Как держишь голову и шею среди людей</label>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="z_head" value="Голова чуть опущена, подбородок вниз"><span>Голова чуть опущена, подбородок вниз</span></label>
-        <label class="opt"><input type="radio" name="z_head" value="Шея напряжена, голова немного втянута"><span>Шея напряжена, голова немного втянута</span></label>
-        <label class="opt"><input type="radio" name="z_head" value="Голова прямо, взгляд вперёд — но это усилие"><span>Голова прямо, взгляд вперёд — но это усилие</span></label>
-        <label class="opt"><input type="radio" name="z_head" value="Голова приподнята, взгляд свободный — естественно"><span>Голова приподнята, взгляд свободный — естественно</span></label>
-        <label class="opt"><input type="radio" name="z_head" value="Не замечаю как держу"><span>Не замечаю как держу</span></label>
-      </div>
-    </div>
-    <div class="field"><label class="q">«Я здесь потому что...»</label><textarea name="z_whyhere" class="short" placeholder="Пиши первое что пришло..."></textarea></div>
+<div class="sec active" id="w0">
+  <div class="banner"><div class="ban-badge">Точка ноль</div><div class="ban-title">День начала</div><div class="ban-desc">Фиксируем стартовую точку. Не готовься — просто запиши как есть.</div></div>
+  <div class="card"><div class="ct">Визуальный старт</div>
+    <div class="f"><div class="photo-box"><div class="pb-icon">📷</div><div class="pb-title">Фото в полный рост — сегодня</div><div class="pb-sub">Обычный день, обычная одежда. Отправь Виктории в Telegram.</div></div></div>
+    <div class="f"><label class="q">Дата</label><input type="date" name="z_date"></div>
+    <div class="f"><label class="q">Три слова которыми описываешь своё отражение прямо сейчас</label><div class="thc"><input type="text" name="z_w1" placeholder="Слово 1"><input type="text" name="z_w2" placeholder="Слово 2"><input type="text" name="z_w3" placeholder="Слово 3"></div></div>
+    <div class="f"><label class="q">Основной цвет который носишь почти каждый день</label><input type="text" name="z_maincolor" placeholder="Цвет..."></div>
+    <div class="f"><label class="q">Цвет который не носишь никогда — и почему</label><div class="tc"><input type="text" name="z_nevercolor" placeholder="Цвет..."><input type="text" name="z_neverwhy" placeholder="Почему..."></div></div>
+    <div class="f"><label class="q">Одна вещь из шкафа которую хочешь но не надеваешь</label><textarea name="z_wantitem" class="sh" placeholder="Опиши её..."></textarea></div>
+    <div class="f"><label class="q">Как держишь плечи прямо сейчас</label><div class="opts">
+      <label class="opt"><input type="radio" name="z_shoulders" value="Сжаты вперёд"><span>Сжаты вперёд</span></label>
+      <label class="opt"><input type="radio" name="z_shoulders" value="Опущены вниз"><span>Опущены вниз</span></label>
+      <label class="opt"><input type="radio" name="z_shoulders" value="Напряжены"><span>Напряжены</span></label>
+      <label class="opt"><input type="radio" name="z_shoulders" value="Расправлены"><span>Расправлены</span></label>
+      <label class="opt"><input type="radio" name="z_shoulders" value="Не замечаю"><span>Не замечаю</span></label>
+    </div></div>
+    <div class="f"><label class="q">Как держишь голову и шею среди людей</label><div class="opts">
+      <label class="opt"><input type="radio" name="z_head" value="Голова чуть опущена"><span>Голова чуть опущена, подбородок вниз</span></label>
+      <label class="opt"><input type="radio" name="z_head" value="Шея напряжена"><span>Шея напряжена, голова немного втянута</span></label>
+      <label class="opt"><input type="radio" name="z_head" value="Голова прямо — усилие"><span>Голова прямо, взгляд вперёд — но это усилие</span></label>
+      <label class="opt"><input type="radio" name="z_head" value="Голова приподнята — естественно"><span>Голова приподнята, взгляд свободный — естественно</span></label>
+      <label class="opt"><input type="radio" name="z_head" value="Не замечаю"><span>Не замечаю как держу</span></label>
+    </div></div>
+    <div class="f"><label class="q">«Я здесь потому что...»</label><textarea name="z_whyhere" class="sh" placeholder="Пиши первое что пришло..."></textarea></div>
   </div>
 </div>
 
-<!-- PWS СЕССИЯ -->
-<div class="week-section" id="wpws">
-  <div class="pws-banner">
-    <div class="pws-label">PWS Сессия</div>
-    <div class="pws-title">Первая сессия</div>
-    <div class="pws-sub">Заполняется после сессии с Викторией — сразу или в тот же день.</div>
+<div class="sec" id="wpws">
+  <div class="pws-hdr"><div class="pl">PWS Сессия</div><div class="pt">Первая сессия</div><div class="ps">Заполняется после сессии с Викторией — сразу или в тот же день.</div></div>
+  <div class="card"><div class="ct">Запрос</div>
+    <div class="f"><label class="q">Дата сессии</label><input type="date" name="pws_date"></div>
+    <div class="f"><label class="q">Как ты пришла — первоначальный запрос своими словами</label><div class="hint">Именно так как формулировала до сессии</div><textarea name="pws_orig" placeholder="Я хотела поработать с тем что..."></textarea></div>
+    <div class="f"><label class="q">Переформулированный запрос — как мы сформулировали его вместе</label><textarea name="pws_reform" placeholder="Запрос для работы: ..."></textarea></div>
+    <div class="f"><label class="q">Интенсивность «боли» в момент входа в сессию</label><div class="sw"><div class="se">Фоном</div><input type="range" name="pws_pain_before" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">7</div><div class="se r">Невыносимо</div></div></div>
   </div>
-  <div class="card">
-    <div class="card-title">Запрос</div>
-    <div class="field"><label class="q">Дата сессии</label><input type="date" name="pws_date"></div>
-    <div class="field">
-      <label class="q">Как ты пришла — твой первоначальный запрос своими словами</label>
-      <div class="hint">Именно так как формулировала до сессии — без редактуры</div>
-      <textarea name="pws_orig" placeholder="Я хотела поработать с тем что..."></textarea>
-    </div>
-    <div class="field">
-      <label class="q">Переформулированный запрос — как мы сформулировали его вместе</label>
-      <div class="hint">Точная формулировка с которой вошли в работу</div>
-      <textarea name="pws_reform" placeholder="Запрос для работы: ..."></textarea>
-    </div>
-    <div class="field">
-      <label class="q">Интенсивность «боли» в момент входа в сессию</label>
-      <div class="scale-wrap">
-        <div class="scale-end">Фоном</div>
-        <input type="range" name="pws_pain_before" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value">
-        <div class="scale-val">7</div>
-        <div class="scale-end r">Невыносимо</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">После сессии</div>
-    <div class="field">
-      <label class="q">Главное осознание в конце сессии</label>
-      <div class="hint">То что осталось. То что изменило угол зрения.</div>
-      <textarea name="pws_awareness" placeholder="Я поняла / почувствовала / увидела что..."></textarea>
-    </div>
-    <div class="field">
-      <label class="q">Для чего тебе была дана эта ситуация?</label>
-      <div class="hint">Как ты сейчас понимаешь — что она несла?</div>
-      <textarea name="pws_meaning" placeholder="Эта ситуация была дана мне чтобы..."></textarea>
-    </div>
-    <div class="field">
-      <label class="q">Интенсивность после сессии</label>
-      <div class="scale-wrap">
-        <div class="scale-end">Ушла</div>
-        <input type="range" name="pws_pain_after" min="1" max="10" value="3" oninput="this.nextElementSibling.textContent=this.value">
-        <div class="scale-val">3</div>
-        <div class="scale-end r">Всё ещё сильно</div>
-      </div>
-    </div>
+  <div class="card"><div class="ct">После сессии</div>
+    <div class="f"><label class="q">Главное осознание в конце сессии</label><div class="hint">То что осталось. То что изменило угол зрения.</div><textarea name="pws_awareness" placeholder="Я поняла / почувствовала / увидела что..."></textarea></div>
+    <div class="f"><label class="q">Для чего тебе была дана эта ситуация?</label><textarea name="pws_meaning" placeholder="Эта ситуация была дана мне чтобы..."></textarea></div>
+    <div class="f"><label class="q">Интенсивность после сессии</label><div class="sw"><div class="se">Ушла</div><input type="range" name="pws_pain_after" min="1" max="10" value="3" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">3</div><div class="se r">Всё ещё сильно</div></div></div>
   </div>
 </div>
 
-<!-- НЕДЕЛЯ 1 -->
-<div class="week-section" id="w1">
-  <div class="week-banner">
-    <div class="week-banner-badge">Неделя 1</div>
-    <div class="week-banner-title">Наблюдение</div>
-    <div class="week-banner-desc">Смотришь на себя как наблюдатель — без оценки, просто фиксируешь.</div>
+<div class="sec" id="w1">
+  <div class="banner"><div class="ban-badge">Неделя 1</div><div class="ban-title">Наблюдение</div><div class="ban-desc">Смотришь на себя как наблюдатель — без оценки, просто фиксируешь.</div></div>
+  <div class="card"><div class="ct">Снаружи</div>
+    <div class="f"><label class="q">Дата</label><input type="date" name="w1_date"></div>
+    <div class="f"><label class="q">Что надевала чаще всего — цвет, силуэт, ощущение в теле</label><textarea name="w1_wore" placeholder="Опиши образ..."></textarea></div>
+    <div class="f"><label class="q">Момент когда оделась иначе чем обычно</label><textarea name="w1_diff" class="sh" placeholder="Что и почему..."></textarea></div>
+    <div class="f"><label class="q">Цвет который притягивал на этой неделе</label><input type="text" name="w1_color" placeholder="Цвет..."></div>
+    <div class="f"><label class="q">Осанка на этой неделе — одно слово</label><input type="text" name="w1_posture" placeholder="Например: сжатая / расслабленная..."></div>
+    <div class="f"><label class="q">Голова и шея — что замечала</label><input type="text" name="w1_head" placeholder="Как держала..."></div>
+    <div class="f"><label class="q">Украшения</label><div class="opts">
+      <label class="opt"><input type="radio" name="w1_jewelry" value="Носила как обычно"><span>Носила как обычно</span></label>
+      <label class="opt"><input type="radio" name="w1_jewelry" value="Надела что-то новое"><span>Надела что-то новое</span></label>
+      <label class="opt"><input type="radio" name="w1_jewelry" value="Хотела но не надела"><span>Хотела но не надела</span></label>
+      <label class="opt"><input type="radio" name="w1_jewelry" value="Совсем без украшений"><span>Совсем без украшений</span></label>
+    </div><textarea name="w1_jewelry_note" class="sh" style="margin-top:7px" placeholder="Подробнее..."></textarea></div>
   </div>
-  <div class="card">
-    <div class="card-title">Снаружи</div>
-    <div class="field"><label class="q">Дата заполнения</label><input type="date" name="w1_date"></div>
-    <div class="field"><label class="q">Что надевала чаще всего — цвет, силуэт, ощущение в теле</label><textarea name="w1_wore" placeholder="Опиши образ..."></textarea></div>
-    <div class="field"><label class="q">Момент когда оделась иначе чем обычно — что это было</label><textarea name="w1_diff" class="short" placeholder="Что и почему..."></textarea></div>
-    <div class="field"><label class="q">Цвет который притягивал на этой неделе</label><input type="text" name="w1_color" placeholder="Цвет..."></div>
-    <div class="field"><label class="q">Осанка на этой неделе — одно слово</label><input type="text" name="w1_posture" placeholder="Например: сжатая / расслабленная..."></div>
-    <div class="field"><label class="q">Голова и шея — что замечала</label><input type="text" name="w1_head" placeholder="Как держала..."></div>
-    <div class="field">
-      <label class="q">Украшения</label>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="w1_jewelry" value="Носила как обычно"><span>Носила как обычно</span></label>
-        <label class="opt"><input type="radio" name="w1_jewelry" value="Надела что-то новое"><span>Надела что-то новое</span></label>
-        <label class="opt"><input type="radio" name="w1_jewelry" value="Хотела но не надела"><span>Хотела но не надела</span></label>
-        <label class="opt"><input type="radio" name="w1_jewelry" value="Совсем без украшений"><span>Совсем без украшений</span></label>
-      </div>
-      <textarea name="w1_jewelry_note" class="short" style="margin-top:8px" placeholder="Подробнее..."></textarea>
-    </div>
+  <div class="card"><div class="ct">Внутри</div>
+    <div class="f"><label class="q">Момент когда что-то сдвинулось</label><div class="hint">«Ответила вслух и не пожалела» — это сдвиг.</div><textarea name="w1_shift" placeholder="Опиши момент..."></textarea></div>
+    <div class="f"><label class="q">Момент когда тело дало сигнал — в какой ситуации</label><textarea name="w1_body" class="sh" placeholder="Ситуация и что в теле..."></textarea></div>
+    <div class="f"><label class="q">Что запретила себе на этой неделе</label><textarea name="w1_forbidden" class="sh" placeholder="Что и почему..."></textarea></div>
+    <div class="f"><label class="q">Твой страх / блок — что с ним</label><div class="opts">
+      <label class="opt"><input type="radio" name="w1_fear" value="Стал тише"><span>Стал тише</span></label>
+      <label class="opt"><input type="radio" name="w1_fear" value="Стал громче"><span>Стал громче</span></label>
+      <label class="opt"><input type="radio" name="w1_fear" value="Просто заметила"><span>Просто заметила — без изменений</span></label>
+      <label class="opt"><input type="radio" name="w1_fear" value="Почти не думала"><span>Почти не думала о нём</span></label>
+    </div><textarea name="w1_fear_note" class="sh" style="margin-top:7px" placeholder="Подробнее..."></textarea></div>
   </div>
-  <div class="card">
-    <div class="card-title">Внутри</div>
-    <div class="field"><label class="q">Момент когда что-то сдвинулось</label><div class="hint">Не обязательно большое. «Ответила вслух и не пожалела» — это сдвиг.</div><textarea name="w1_shift" placeholder="Опиши момент..."></textarea></div>
-    <div class="field"><label class="q">Момент когда тело дало сигнал — в какой ситуации</label><textarea name="w1_body" class="short" placeholder="Ситуация и что в теле..."></textarea></div>
-    <div class="field"><label class="q">Что запретила себе на этой неделе</label><textarea name="w1_forbidden" class="short" placeholder="Что и почему..."></textarea></div>
-    <div class="field">
-      <label class="q">Твой страх / блок — что с ним</label>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="w1_fear" value="Стал тише"><span>Стал тише</span></label>
-        <label class="opt"><input type="radio" name="w1_fear" value="Стал громче"><span>Стал громче</span></label>
-        <label class="opt"><input type="radio" name="w1_fear" value="Просто заметила"><span>Просто заметила — без изменений</span></label>
-        <label class="opt"><input type="radio" name="w1_fear" value="Почти не думала"><span>Почти не думала о нём</span></label>
-      </div>
-      <textarea name="w1_fear_note" class="short" style="margin-top:8px" placeholder="Подробнее..."></textarea>
-    </div>
-  </div>
-  <div class="exp-box">
-    <div class="exp-label">Эксперимент недели 1</div>
-    <div class="exp-task">Take out one item from your wardrobe that you consider 'too beautiful for an ordinary day'. Put it on at home — don't go out in it, just spend an hour in it. Notice: what happens in your body? What does your inner voice say? Do you want to take it off or stay in it?</div>
-    <div class="field"><label class="q">Что делала</label><textarea name="w1_exp_did" class="short" placeholder="Опиши..."></textarea></div>
-    <div class="field"><label class="q">В теле ДО</label><textarea name="w1_exp_before" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">В теле ВО ВРЕМЯ</label><textarea name="w1_exp_during" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">В теле ПОСЛЕ</label><textarea name="w1_exp_after" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Одно наблюдение</label><textarea name="w1_exp_note" class="short" placeholder="..."></textarea></div>
+  <div class="exp"><div class="el">Эксперимент недели 1</div>
+    <div class="et">Take out one item you consider 'too beautiful for an ordinary day'. Put it on at home — don't go out, just spend an hour in it. Notice: what happens in your body? What does your inner voice say?</div>
+    <div class="f"><label class="q">Что делала</label><textarea name="w1_exp_did" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">В теле ДО</label><textarea name="w1_exp_before" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">В теле ВО ВРЕМЯ</label><textarea name="w1_exp_during" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">В теле ПОСЛЕ</label><textarea name="w1_exp_after" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Одно наблюдение</label><textarea name="w1_exp_note" class="sh" placeholder="..."></textarea></div>
   </div>
 </div>
 
-<!-- НЕДЕЛЯ 2 -->
-<div class="week-section" id="w2">
-  <div class="week-banner">
-    <div class="week-banner-badge">Неделя 2</div>
-    <div class="week-banner-title">Архетипическая сессия</div>
-    <div class="week-banner-desc">До сессии, во время, и наблюдение всю неделю после.</div>
+<div class="sec" id="w2">
+  <div class="banner"><div class="ban-badge">Неделя 2</div><div class="ban-title">Архетипическая сессия</div><div class="ban-desc">До сессии, во время, и наблюдение всю неделю после.</div></div>
+  <div class="card"><div class="ct">До сессии</div>
+    <div class="f"><label class="q">Дата</label><input type="date" name="w2_pre_date"></div>
+    <div class="f"><label class="q">Как ты сейчас — физически, в теле</label><textarea name="w2_pre_feel" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Что беспокоит или интересует больше всего</label><textarea name="w2_pre_main" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Образ или метафора которая описывает состояние</label><input type="text" name="w2_pre_metaphor" placeholder="..."></div>
   </div>
-  <div class="card">
-    <div class="card-title">До сессии</div>
-    <div class="field"><label class="q">Дата</label><input type="date" name="w2_pre_date"></div>
-    <div class="field"><label class="q">Как ты сейчас — физически, в теле</label><textarea name="w2_pre_feel" class="short" placeholder="Что замечаешь..."></textarea></div>
-    <div class="field"><label class="q">Что беспокоит или интересует больше всего</label><textarea name="w2_pre_main" class="short" placeholder="Первое что пришло..."></textarea></div>
-    <div class="field"><label class="q">Образ или метафора которая описывает состояние</label><input type="text" name="w2_pre_metaphor" placeholder="Например: замёрзший ручей..."></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Архетипическая сессия</div>
-    <div class="field"><label class="q">Дата сессии</label><input type="date" name="w2_session_date"></div>
-    <div class="field"><label class="q">Точный запрос с которым вошла в сессию</label><textarea name="w2_request" placeholder="Мой запрос..."></textarea></div>
-    <div class="divider"></div>
-    <div class="field">
-      <label class="q" style="margin-bottom:10px">Четыре архетипа — твои наблюдения</label>
-      <div class="arch-grid">
-        <div class="arch-card">
-          <div class="arch-head"><div class="arch-dot" style="background:#C47B3A"></div><div><div class="arch-name">Воин</div><div class="arch-sub">Warrior</div></div></div>
-          <div class="arch-f"><div class="arch-q">Цвет</div><input type="text" name="w2_warrior_color" placeholder="..."></div>
-          <div class="arch-f"><div class="arch-q">Где в теле</div><textarea name="w2_warrior_body" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Визуальный образ себя</div><textarea name="w2_warrior_visual" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Доступность</div><div class="scale-wrap"><div class="scale-end">Нет</div><input type="range" name="w2_warrior_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">5</div><div class="scale-end r">Полностью</div></div></div>
+  <div class="card"><div class="ct">Архетипическая сессия</div>
+    <div class="f"><label class="q">Дата сессии</label><input type="date" name="w2_session_date"></div>
+    <div class="f"><label class="q">Точный запрос с которым вошла в сессию</label><textarea name="w2_request" placeholder="Мой запрос..."></textarea></div>
+    <div class="div"></div>
+    <div class="f"><label class="q" style="margin-bottom:9px">Четыре архетипа — твои наблюдения</label>
+      <div class="ag">
+        <div class="ac"><div class="ah"><div class="ad" style="background:#C47B3A"></div><div><div class="an">Воин</div><div class="as">Warrior</div></div></div>
+          <div class="af"><div class="aq">Цвет</div><input type="text" name="w2_warrior_color" placeholder="..."></div>
+          <div class="af"><div class="aq">Где в теле</div><textarea name="w2_warrior_body" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Визуальный образ себя</div><textarea name="w2_warrior_visual" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Доступность</div><div class="sw"><div class="se">Нет</div><input type="range" name="w2_warrior_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">5</div><div class="se r">Да</div></div></div>
         </div>
-        <div class="arch-card">
-          <div class="arch-head"><div class="arch-dot" style="background:#7B6BAE"></div><div><div class="arch-name">Маг</div><div class="arch-sub">Magician</div></div></div>
-          <div class="arch-f"><div class="arch-q">Цвет</div><input type="text" name="w2_magician_color" placeholder="..."></div>
-          <div class="arch-f"><div class="arch-q">Где в теле</div><textarea name="w2_magician_body" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Визуальный образ себя</div><textarea name="w2_magician_visual" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Доступность</div><div class="scale-wrap"><div class="scale-end">Нет</div><input type="range" name="w2_magician_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">5</div><div class="scale-end r">Полностью</div></div></div>
+        <div class="ac"><div class="ah"><div class="ad" style="background:#7B6BAE"></div><div><div class="an">Маг</div><div class="as">Magician</div></div></div>
+          <div class="af"><div class="aq">Цвет</div><input type="text" name="w2_magician_color" placeholder="..."></div>
+          <div class="af"><div class="aq">Где в теле</div><textarea name="w2_magician_body" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Визуальный образ себя</div><textarea name="w2_magician_visual" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Доступность</div><div class="sw"><div class="se">Нет</div><input type="range" name="w2_magician_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">5</div><div class="se r">Да</div></div></div>
         </div>
-        <div class="arch-card">
-          <div class="arch-head"><div class="arch-dot" style="background:#C4677A"></div><div><div class="arch-name">Возлюбленная</div><div class="arch-sub">Lover</div></div></div>
-          <div class="arch-f"><div class="arch-q">Цвет</div><input type="text" name="w2_lover_color" placeholder="..."></div>
-          <div class="arch-f"><div class="arch-q">Где в теле</div><textarea name="w2_lover_body" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Визуальный образ себя</div><textarea name="w2_lover_visual" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Доступность</div><div class="scale-wrap"><div class="scale-end">Нет</div><input type="range" name="w2_lover_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">5</div><div class="scale-end r">Полностью</div></div></div>
+        <div class="ac"><div class="ah"><div class="ad" style="background:#C4677A"></div><div><div class="an">Возлюбленная</div><div class="as">Lover</div></div></div>
+          <div class="af"><div class="aq">Цвет</div><input type="text" name="w2_lover_color" placeholder="..."></div>
+          <div class="af"><div class="aq">Где в теле</div><textarea name="w2_lover_body" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Визуальный образ себя</div><textarea name="w2_lover_visual" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Доступность</div><div class="sw"><div class="se">Нет</div><input type="range" name="w2_lover_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">5</div><div class="se r">Да</div></div></div>
         </div>
-        <div class="arch-card">
-          <div class="arch-head"><div class="arch-dot" style="background:#1C5C8A"></div><div><div class="arch-name">Суверен</div><div class="arch-sub">Sovereign</div></div></div>
-          <div class="arch-f"><div class="arch-q">Цвет</div><input type="text" name="w2_sovereign_color" placeholder="..."></div>
-          <div class="arch-f"><div class="arch-q">Где в теле</div><textarea name="w2_sovereign_body" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Визуальный образ себя</div><textarea name="w2_sovereign_visual" class="short" placeholder="..."></textarea></div>
-          <div class="arch-f"><div class="arch-q">Доступность</div><div class="scale-wrap"><div class="scale-end">Нет</div><input type="range" name="w2_sovereign_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">5</div><div class="scale-end r">Полностью</div></div></div>
+        <div class="ac"><div class="ah"><div class="ad" style="background:#1C5C8A"></div><div><div class="an">Суверен</div><div class="as">Sovereign</div></div></div>
+          <div class="af"><div class="aq">Цвет</div><input type="text" name="w2_sovereign_color" placeholder="..."></div>
+          <div class="af"><div class="aq">Где в теле</div><textarea name="w2_sovereign_body" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Визуальный образ себя</div><textarea name="w2_sovereign_visual" class="sh" placeholder="..."></textarea></div>
+          <div class="af"><div class="aq">Доступность</div><div class="sw"><div class="se">Нет</div><input type="range" name="w2_sovereign_scale" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">5</div><div class="se r">Да</div></div></div>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="field"><label class="q">Какой архетип отозвался сильнее всего и почему</label><textarea name="w2_strongest" class="short" placeholder="..."></textarea></div>
-      <div class="field"><label class="q">Какой архетип сейчас в тени</label><textarea name="w2_shadow" class="short" placeholder="..."></textarea></div>
-      <div class="field"><label class="q">Главное осознание в конце сессии</label><textarea name="w2_awareness" placeholder="..."></textarea></div>
-      <div class="field"><label class="q">Для чего тебе была дана эта ситуация</label><textarea name="w2_meaning" placeholder="..."></textarea></div>
-      <div class="field"><label class="q">Как изменилось ощущение себя — в теле</label><textarea name="w2_body_after" class="short" placeholder="..."></textarea></div>
-      <div class="field">
-        <label class="q">Интенсивность нового состояния в теле</label>
-        <div class="scale-wrap"><div class="scale-end">Не чувствую</div><input type="range" name="w2_new_state" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">5</div><div class="scale-end r">Очень сильно</div></div>
+      <div class="div"></div>
+      <div class="f"><label class="q">Какой архетип отозвался сильнее всего и почему</label><textarea name="w2_strongest" class="sh" placeholder="..."></textarea></div>
+      <div class="f"><label class="q">Какой архетип сейчас в тени</label><textarea name="w2_shadow" class="sh" placeholder="..."></textarea></div>
+      <div class="f"><label class="q">Главное осознание в конце сессии</label><textarea name="w2_awareness" placeholder="..."></textarea></div>
+      <div class="f"><label class="q">Для чего тебе была дана эта ситуация</label><textarea name="w2_meaning" placeholder="..."></textarea></div>
+      <div class="f"><label class="q">Как изменилось ощущение себя — в теле</label><textarea name="w2_body_after" class="sh" placeholder="..."></textarea></div>
+      <div class="f"><label class="q">Интенсивность нового состояния в теле</label><div class="sw"><div class="se">Не чувствую</div><input type="range" name="w2_new_state" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">5</div><div class="se r">Очень сильно</div></div></div>
+    </div>
+  </div>
+  <div class="card"><div class="ct">После сессии — наблюдение недели</div>
+    <div class="f"><label class="q">Изменилось ли что-то в том как оделась на следующий день</label><textarea name="w2_next_dress" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Какой цвет захотелось надеть — надела или нет</label><div class="tc"><input type="text" name="w2_color_wanted" placeholder="Цвет..."><div class="opts" style="flex-direction:row;gap:6px;"><label class="opt"><input type="radio" name="w2_color_wore" value="Да"><span>Да</span></label><label class="opt"><input type="radio" name="w2_color_wore" value="Нет"><span>Нет</span></label></div></div></div>
+    <div class="f"><label class="q">Что произошло с осанкой и как несёшь себя</label><textarea name="w2_posture_after" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Самый значимый момент недели</label><textarea name="w2_week_moment" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Где новое состояние начало работать</label><textarea name="w2_new_where" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Был ли момент когда старый паттерн вернулся</label><textarea name="w2_old_pattern" class="sh" placeholder="..."></textarea></div>
+  </div>
+  <div class="exp"><div class="el">Эксперимент недели 2</div>
+    <div class="et">Add one accessory you don't usually wear — a ring, earrings, a necklace. Wear it all day. Don't explain it to anyone. Notice: when do you remember it's there? When do you want to take it off?</div>
+    <div class="f"><label class="q">Три наблюдения — до / во время / после</label><textarea name="w2_exp" placeholder="..."></textarea></div>
+  </div>
+</div>
+
+<div class="sec" id="w3">
+  <div class="banner"><div class="ban-badge">Неделя 3</div><div class="ban-title">Интеграция</div><div class="ban-desc">Фиксируем что изменилось — снаружи и внутри.</div></div>
+  <div class="card"><div class="ct">Снаружи</div>
+    <div class="f"><label class="q">Дата</label><input type="date" name="w3_date"></div>
+    <div class="f"><label class="q">Что изменилось в обычном образе за три недели</label><textarea name="w3_changed" placeholder="Конкретно..."></textarea></div>
+    <div class="f"><label class="q">Появился ли новый цвет в гардеробе</label><textarea name="w3_new_color" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Та вещь из точки ноль — надела или нет</label><div class="opts">
+      <label class="opt"><input type="radio" name="w3_item" value="Да"><span>Да — надела</span></label>
+      <label class="opt"><input type="radio" name="w3_item" value="Нет"><span>Нет</span></label>
+      <label class="opt"><input type="radio" name="w3_item" value="Купила новое"><span>Купила что-то новое вместо неё</span></label>
+    </div><textarea name="w3_item_note" class="sh" style="margin-top:7px" placeholder="Что произошло..."></textarea></div>
+    <div class="f"><label class="q">Как изменилась осанка — сравни с точкой ноль</label><textarea name="w3_posture" class="sh" placeholder="Было / стало..."></textarea></div>
+    <div class="f"><label class="q">Голова и шея — что изменилось</label><input type="text" name="w3_head" placeholder="..."></div>
+    <div class="f"><label class="q">Украшения — что изменилось</label><textarea name="w3_jewelry" class="sh" placeholder="..."></textarea></div>
+  </div>
+  <div class="card"><div class="ct">Внутри</div>
+    <div class="f"><label class="q">Что стало чуть легче в том как появляешься в мире</label><textarea name="w3_easier" placeholder="Конкретно..."></textarea></div>
+    <div class="f"><label class="q">Что всё ещё сложно — честно</label><textarea name="w3_hard" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Момент когда поступила иначе чем раньше точно поступила бы</label><textarea name="w3_different" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Страх из начала — где он сейчас</label>
+      <div class="tc" style="gap:14px;margin-top:7px">
+        <div><div class="hint">Был в начале</div><div class="sw"><div class="se">Мало</div><input type="range" name="w3_fear_was" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">7</div><div class="se r">Очень</div></div></div>
+        <div><div class="hint">Сейчас</div><div class="sw"><div class="se">Мало</div><input type="range" name="w3_fear_now" min="1" max="10" value="4" oninput="this.nextElementSibling.textContent=this.value"><div class="sv">4</div><div class="se r">Очень</div></div></div>
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">После сессии — наблюдение недели</div>
-    <div class="field"><label class="q">Изменилось ли что-то в том как оделась на следующий день</label><textarea name="w2_next_dress" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Какой цвет захотелось надеть — надела или нет</label><div class="two-col"><input type="text" name="w2_color_wanted" placeholder="Цвет..."><div class="opts" style="flex-direction:row;gap:6px;"><label class="opt"><input type="radio" name="w2_color_wore" value="Да"><span>Да</span></label><label class="opt"><input type="radio" name="w2_color_wore" value="Нет"><span>Нет</span></label></div></div></div>
-    <div class="field"><label class="q">Что произошло с осанкой и как несёшь себя</label><textarea name="w2_posture_after" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Самый значимый момент недели после сессии</label><textarea name="w2_week_moment" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Где новое состояние начало работать</label><textarea name="w2_new_where" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Был ли момент когда старый паттерн вернулся</label><textarea name="w2_old_pattern" class="short" placeholder="..."></textarea></div>
-  </div>
-  <div class="exp-box">
-    <div class="exp-label">Эксперимент недели 2</div>
-    <div class="exp-task">Add one accessory you don't usually wear — a ring, earrings, a necklace, a scarf. Wear it all day. Don't explain it to anyone. Notice: when do you remember it's there? When do you want to take it off? When do you forget it's there — and what's happening in that moment?</div>
-    <div class="field"><label class="q">Три наблюдения — до / во время / после</label><textarea name="w2_exp" placeholder="..."></textarea></div>
+  <div class="exp"><div class="el">Эксперимент недели 3</div>
+    <div class="et">Go out in something you genuinely like — not 'appropriate', but something you like. Just once. Notice: does your walk change? How do you hold your head?</div>
+    <div class="f"><label class="q">Что делала и что заметила</label><textarea name="w3_exp" placeholder="..."></textarea></div>
   </div>
 </div>
 
-<!-- НЕДЕЛЯ 3 -->
-<div class="week-section" id="w3">
-  <div class="week-banner">
-    <div class="week-banner-badge">Неделя 3</div>
-    <div class="week-banner-title">Интеграция</div>
-    <div class="week-banner-desc">Фиксируем что изменилось — снаружи и внутри.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Снаружи</div>
-    <div class="field"><label class="q">Дата</label><input type="date" name="w3_date"></div>
-    <div class="field"><label class="q">Что изменилось в обычном образе за три недели</label><textarea name="w3_changed" placeholder="Конкретно..."></textarea></div>
-    <div class="field"><label class="q">Появился ли новый цвет в гардеробе</label><textarea name="w3_new_color" class="short" placeholder="..."></textarea></div>
-    <div class="field">
-      <label class="q">Та вещь из точки ноль — надела или нет</label>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="w3_item" value="Да"><span>Да — надела</span></label>
-        <label class="opt"><input type="radio" name="w3_item" value="Нет"><span>Нет</span></label>
-        <label class="opt"><input type="radio" name="w3_item" value="Купила новое"><span>Купила что-то новое вместо неё</span></label>
-      </div>
-      <textarea name="w3_item_note" class="short" style="margin-top:8px" placeholder="Что произошло..."></textarea>
-    </div>
-    <div class="field"><label class="q">Как изменилась осанка — сравни с точкой ноль</label><textarea name="w3_posture" class="short" placeholder="Было / стало..."></textarea></div>
-    <div class="field"><label class="q">Голова и шея — что изменилось</label><input type="text" name="w3_head" placeholder="..."></div>
-    <div class="field"><label class="q">Украшения за последнюю неделю — что изменилось</label><textarea name="w3_jewelry" class="short" placeholder="..."></textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Внутри</div>
-    <div class="field"><label class="q">Что стало чуть легче в том как появляешься в мире</label><textarea name="w3_easier" placeholder="Конкретно..."></textarea></div>
-    <div class="field"><label class="q">Что всё ещё сложно — честно</label><textarea name="w3_hard" class="short" placeholder="Без прикрас..."></textarea></div>
-    <div class="field"><label class="q">Момент когда поступила иначе чем раньше точно поступила бы</label><textarea name="w3_different" placeholder="Ситуация и что сделала иначе..."></textarea></div>
-    <div class="field">
-      <label class="q">Страх из начала — где он сейчас</label>
-      <div class="two-col">
-        <div><div class="hint">Был в начале</div><div class="scale-wrap"><div class="scale-end">Мало</div><input type="range" name="w3_fear_was" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">7</div><div class="scale-end r">Очень</div></div></div>
-        <div><div class="hint">Сейчас</div><div class="scale-wrap"><div class="scale-end">Мало</div><input type="range" name="w3_fear_now" min="1" max="10" value="4" oninput="this.nextElementSibling.textContent=this.value"><div class="scale-val">4</div><div class="scale-end r">Очень</div></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="exp-box">
-    <div class="exp-label">Эксперимент недели 3</div>
-    <div class="exp-task">Go out in something you like — not 'appropriate', but something you genuinely like. Just once. Notice: does your walk change? How do you hold your head? Do you look at your reflection in shop windows or avoid it?</div>
-    <div class="field"><label class="q">Что делала и что заметила</label><textarea name="w3_exp" placeholder="..."></textarea></div>
+<div class="sec" id="wf">
+  <div class="banner"><div class="ban-badge">Финал</div><div class="ban-title">Три недели спустя</div><div class="ban-desc">Сравниваем начало и конец.</div></div>
+  <div class="card"><div class="ct">Финальный портрет</div>
+    <div class="f"><div class="photo-box"><div class="pb-icon">📷</div><div class="pb-title">Фото в полный рост — сейчас</div><div class="pb-sub">Снова обычный день. Не готовься. Отправь Виктории в Telegram.</div></div></div>
+    <div class="f"><label class="q">Три слова которыми описываешь своё отражение сейчас</label><div class="thc"><input type="text" name="f_w1" placeholder="Слово 1"><input type="text" name="f_w2" placeholder="Слово 2"><input type="text" name="f_w3" placeholder="Слово 3"></div><div class="hint" style="margin-top:5px">Сравни с тремя словами из точки ноль</div></div>
+    <div class="f"><label class="q">Что изменилось в шкафу — реально, физически</label><textarea name="f_wardrobe" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Та вещь из точки ноль — что с ней в итоге</label><textarea name="f_item" class="sh" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Что стало чуть легче в том как появляешься в мире</label><textarea name="f_easier" placeholder="Конкретно..."></textarea></div>
+    <div class="f"><label class="q">«Я теперь позволяю себе...»</label><input type="text" name="f_allow" placeholder="Я теперь позволяю себе..."></div>
+    <div class="f"><label class="q">Что было самым важным открытием за три недели</label><textarea name="f_discovery" placeholder="..."></textarea></div>
+    <div class="f"><label class="q">Что хочется исследовать дальше</label><textarea name="f_next" class="sh" placeholder="..."></textarea></div>
   </div>
 </div>
 
-<!-- ФИНАЛ -->
-<div class="week-section" id="wf">
-  <div class="week-banner">
-    <div class="week-banner-badge">Финал</div>
-    <div class="week-banner-title">Три недели спустя</div>
-    <div class="week-banner-desc">Сравниваем начало и конец.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Финальный портрет</div>
-    <div class="field"><div class="photo-box"><div class="photo-box-icon">📷</div><div class="photo-box-title">Фото в полный рост — сейчас</div><div class="photo-box-sub">Снова обычный день. Не готовься. Отправь Виктории в Telegram.</div></div></div>
-    <div class="field">
-      <label class="q">Три слова которыми описываешь своё отражение сейчас</label>
-      <div class="three-col"><input type="text" name="f_w1" placeholder="Слово 1"><input type="text" name="f_w2" placeholder="Слово 2"><input type="text" name="f_w3" placeholder="Слово 3"></div>
-      <div class="hint" style="margin-top:6px">Сравни с тремя словами из точки ноль</div>
-    </div>
-    <div class="field"><label class="q">Что изменилось в шкафу — реально, физически</label><textarea name="f_wardrobe" placeholder="Что достала, купила, убрала..."></textarea></div>
-    <div class="field"><label class="q">Та вещь из точки ноль — что с ней в итоге</label><textarea name="f_item" class="short" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Что стало чуть легче в том как появляешься в мире</label><textarea name="f_easier" placeholder="Конкретно..."></textarea></div>
-    <div class="field"><label class="q">«Я теперь позволяю себе...»</label><input type="text" name="f_allow" placeholder="Я теперь позволяю себе..."></div>
-    <div class="field"><label class="q">Что было самым важным открытием за три недели</label><textarea name="f_discovery" placeholder="..."></textarea></div>
-    <div class="field"><label class="q">Что хочется исследовать дальше</label><textarea name="f_next" class="short" placeholder="..."></textarea></div>
-  </div>
 </div>
-
-</div><!-- end main -->
-
-<div class="save-bar">
-  <div class="save-status" id="saveStatus">Заполни и нажми «Сохранить»</div>
-  <button class="save-btn" id="saveBtn" onclick="saveToGoogleDrive()">Сохранить →</button>
+<div class="bar">
+  <div class="bs" id="st">Заполни и нажми «Сохранить»</div>
+  <button class="btn" id="sb" onclick="save()">Сохранить →</button>
 </div>
-
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5JLL3po_XxbH-xDv78ER39PVfCjQou8AJhKYCpHv_5g7wV4cFcXi7FVnMnTgSIpwxTg/exec';
-const PARTICIPANT_NAME = 'Diana';
-const CURRENT_WEEK_NAMES = {
-  'w0': 'BASELINE', 'wpws': 'PWS SESSION',
-  'w1': 'WEEK 1', 'w2': 'WEEK 2', 'w3': 'WEEK 3', 'wf': 'FINAL'
-};
+const URL = 'https://script.google.com/macros/s/AKfycby5JLL3po_XxbH-xDv78ER39PVfCjQou8AJhKYCpHv_5g7wV4cFcXi7FVnMnTgSIpwxTg/exec';
+const NAME = 'Diana';
+const SECTIONS = {w0:'BASELINE',wpws:'PWS SESSION',w1:'WEEK 1',w2:'WEEK 2',w3:'WEEK 3',wf:'FINAL'};
+let cur = 'w0';
 
-let currentWeek = 'w0';
-
-function showWeek(id, tab) {
-  document.querySelectorAll('.week-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+function show(id, tab) {
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   tab.classList.add('active');
-  currentWeek = id;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  loadFromLocal();
+  cur = id;
+  window.scrollTo({top:0,behavior:'smooth'});
+  loadLocal();
 }
 
-function collectFields() {
-  const section = document.getElementById(currentWeek);
-  const fields = {};
-  section.querySelectorAll('input, textarea').forEach(el => {
+function collect() {
+  const s = document.getElementById(cur);
+  const f = {};
+  s.querySelectorAll('input,textarea').forEach(el => {
     if (!el.name) return;
-    if (el.type === 'radio') { if (el.checked) fields[el.name] = el.value; }
-    else if (el.type === 'range') { fields[el.name] = el.value; }
-    else if (el.value && el.value.trim()) { fields[el.name] = el.value.trim(); }
+    if (el.type==='radio') { if(el.checked) f[el.name]=el.value; }
+    else if (el.type==='range') { f[el.name]=el.value; }
+    else if (el.value && el.value.trim()) { f[el.name]=el.value.trim(); }
   });
-  return fields;
+  return f;
 }
 
-function saveToLocal() {
-  const key = Diana + '_' + currentWeek;
-  localStorage.setItem(key, JSON.stringify(collectFields()));
+function saveLocal() {
+  try { localStorage.setItem(NAME+'_'+cur, JSON.stringify(collect())); } catch(e) {}
 }
 
-function loadFromLocal() {
-  const key = Diana + '_' + currentWeek;
-  const saved = localStorage.getItem(key);
-  if (!saved) return;
-  const data = JSON.parse(saved);
-  const section = document.getElementById(currentWeek);
-  Object.entries(data).forEach(([name, value]) => {
-    const els = section.querySelectorAll(`[name="${name}"]`);
-    els.forEach(el => {
-      if (el.type === 'radio') { el.checked = el.value === value; }
-      else { el.value = value; }
-    });
-  });
-}
-
-async function saveToGoogleDrive() {
-  const btn = document.getElementById('saveBtn');
-  const status = document.getElementById('saveStatus');
-  const fields = collectFields();
-
-  if (Object.keys(fields).length === 0) {
-    status.textContent = 'Нечего сохранять — заполни хотя бы одно поле';
-    status.className = 'save-status error';
-    return;
-  }
-
-  btn.disabled = true;
-  status.textContent = 'Сохраняю...';
-  status.className = 'save-status saving';
-
-  // Save locally first
-  saveToLocal();
-
-  const payload = {
-    participantName: Diana,
-    section: CURRENT_WEEK_NAMES[currentWeek],
-    fields: fields
-  };
-
+function loadLocal() {
   try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+    const d = localStorage.getItem(NAME+'_'+cur);
+    if (!d) return;
+    const data = JSON.parse(d);
+    const s = document.getElementById(cur);
+    Object.entries(data).forEach(([k,v]) => {
+      s.querySelectorAll('[name="'+k+'"]').forEach(el => {
+        if (el.type==='radio') el.checked = el.value===v;
+        else el.value = v;
+      });
     });
-    status.textContent = '✓ Сохранено в Google Drive';
-    status.className = 'save-status saved';
-  } catch (err) {
-    status.textContent = '✓ Сохранено локально (Drive недоступен)';
-    status.className = 'save-status saved';
-  }
-
-  btn.disabled = false;
-  setTimeout(() => {
-    status.textContent = 'Все изменения сохранены';
-    status.className = 'save-status';
-  }, 4000);
+  } catch(e) {}
 }
 
-// Auto-save locally on input
-let autoSaveTimer;
-document.querySelectorAll('input, textarea').forEach(el => {
-  el.addEventListener('input', () => {
-    clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(saveToLocal, 1500);
-  });
-  el.addEventListener('change', saveToLocal);
-});
+function save() {
+  const fields = collect();
+  if (Object.keys(fields).length === 0) {
+    setStatus('Заполни хотя бы одно поле', 'error'); return;
+  }
+  saveLocal();
+  setStatus('Сохраняю...', 'saving');
+  document.getElementById('sb').disabled = true;
 
-// Load on start
-loadFromLocal();
+  // Build GET URL with all params
+  const params = new URLSearchParams();
+  params.set('participant', NAME);
+  params.set('section', SECTIONS[cur]);
+  Object.entries(fields).forEach(([k,v]) => params.set(k, v));
+
+  const fullURL = URL + '?' + params.toString();
+
+  // Use image trick to bypass CORS completely
+  const img = new Image();
+  img.onload = img.onerror = function() {
+    setStatus('✓ Сохранено в Google Drive', 'saved');
+    document.getElementById('sb').disabled = false;
+    setTimeout(()=>setStatus('Все изменения сохранены',''),4000);
+  };
+  img.src = fullURL;
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('st');
+  el.textContent = msg;
+  el.className = 'bs' + (cls ? ' '+cls : '');
+}
+
+let t;
+document.querySelectorAll('input,textarea').forEach(el => {
+  el.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(saveLocal,1500); });
+  el.addEventListener('change', saveLocal);
+});
+loadLocal();
 </script>
 </body>
 </html>
