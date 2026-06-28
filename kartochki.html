@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карточки-гид — Виктория Бюргиссер</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --cream: #F7F3EE;
+    --warm-white: #FDFAF7;
+    --ink: #1C1815;
+    --ink-soft: #4A3F38;
+    --ink-muted: #8C7B72;
+    --border: #E2D9D0;
+    --border-strong: #C4B5A8;
+    --accent: #A0846E;
+    --gold: #C4A882;
+    --c1: #C4677A; --c1-l: #F9EEF1; --c1-m: #E8C5CD;
+    --c2: #7B6BAE; --c2-l: #F0EEF8; --c2-m: #C9C3E4;
+    --c3: #4A9B7A; --c3-l: #EBF5F1; --c3-m: #B3D9CA;
+    --c4: #C47B3A; --c4-l: #FBF2E8; --c4-m: #E6C9A3;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .page-header {
+    background: var(--ink);
+    padding: 44px 32px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute; top: -50px; right: -50px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(160,132,110,0.12);
+  }
+  .header-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300;
+    color: #FDFAF7; line-height: 1.2; margin-bottom: 8px;
+  }
+  .header-title em { font-style: italic; color: #D4A8A0; }
+  .header-sub {
+    font-size: 13px; color: rgba(253,250,247,0.5);
+    max-width: 460px; margin: 0 auto; font-weight: 300;
+  }
+
+  .nav-tabs {
+    display: flex;
+    background: var(--warm-white);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 24px;
+    overflow-x: auto;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-tab {
+    padding: 14px 18px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-tab:hover { color: var(--ink-soft); }
+  .nav-tab.active { border-bottom-color: currentColor; }
+  .nav-tab[data-tab="1"] { color: var(--c1); }
+  .nav-tab[data-tab="1"].active { color: var(--c1); }
+  .nav-tab[data-tab="2"] { color: var(--c2); }
+  .nav-tab[data-tab="2"].active { color: var(--c2); }
+  .nav-tab[data-tab="3"] { color: var(--c3); }
+  .nav-tab[data-tab="3"].active { color: var(--c3); }
+  .nav-tab[data-tab="4"] { color: var(--c4); }
+  .nav-tab[data-tab="4"].active { color: var(--c4); }
+  .nav-tab[data-tab="funnel"] { color: var(--accent); }
+  .nav-tab[data-tab="funnel"].active { color: var(--accent); }
+  .nav-tab .tab-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+  }
+
+  .main { max-width: 720px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  .cat-page { display: none; }
+  .cat-page.active { display: block; }
+
+  /* Card header strip */
+  .card-strip {
+    border-radius: var(--radius);
+    padding: 24px 26px 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-strip[data-cat="1"] { background: var(--c1-l); border: 0.5px solid var(--c1-m); }
+  .card-strip[data-cat="2"] { background: var(--c2-l); border: 0.5px solid var(--c2-m); }
+  .card-strip[data-cat="3"] { background: var(--c3-l); border: 0.5px solid var(--c3-m); }
+  .card-strip[data-cat="4"] { background: var(--c4-l); border: 0.5px solid var(--c4-m); }
+  .card-strip[data-cat="funnel"] { background: var(--accent); }
+
+  .strip-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-strip[data-cat="1"] .strip-label { color: var(--c1); }
+  .card-strip[data-cat="2"] .strip-label { color: var(--c2); }
+  .card-strip[data-cat="3"] .strip-label { color: var(--c3); }
+  .card-strip[data-cat="4"] .strip-label { color: var(--c4); }
+
+  .strip-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 400;
+    color: var(--ink); line-height: 1.2; margin-bottom: 6px;
+  }
+  .strip-sub { font-size: 12.5px; color: var(--ink-muted); }
+
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 14px;
+  }
+  .meta-tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11.5px; font-weight: 500;
+    background: white;
+    border: 0.5px solid var(--border-strong);
+    color: var(--ink-soft);
+  }
+  .meta-tag.accent-tag {
+    border: none;
+  }
+  .card-strip[data-cat="1"] .accent-tag { background: var(--c1); color: white; }
+  .card-strip[data-cat="2"] .accent-tag { background: var(--c2); color: white; }
+  .card-strip[data-cat="3"] .accent-tag { background: var(--c3); color: white; }
+  .card-strip[data-cat="4"] .accent-tag { background: var(--c4); color: white; }
+
+  /* Content cards */
+  .card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 22px 18px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 14px;
+    padding-bottom: 10px; border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-icon {
+    width: 20px; height: 20px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .ci-theory { background: #EEE8F5; color: var(--c2); }
+  .ci-visual { background: #FBF5EB; color: var(--c4); }
+  .ci-phrases { background: #FCEAED; color: var(--c1); }
+  .ci-pws { background: #E5F2EC; color: var(--c3); }
+  .ci-style { background: #F0EEF8; color: var(--c2); }
+  .ci-shift { background: #F7F3EE; color: var(--accent); }
+  .ci-funnel { background: var(--ink); color: white; }
+
+  p { color: var(--ink-soft); margin-bottom: 10px; line-height: 1.7; font-size: 13.5px; }
+  p:last-child { margin-bottom: 0; }
+
+  .marker-list, .phrase-list, .shift-list { list-style: none; }
+  .marker-list li, .shift-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .marker-list li:last-child, .shift-list li:last-child { border-bottom: none; }
+  .marker-list li::before {
+    content: '◦';
+    color: var(--border-strong);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 14px;
+  }
+  .shift-list li::before {
+    content: '→';
+    color: var(--c3);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .phrase-list li {
+    padding: 10px 14px;
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .phrase-list li:last-child { margin-bottom: 0; }
+  .phrase-text { font-style: italic; color: var(--ink); }
+  .phrase-note { font-size: 11.5px; color: var(--ink-muted); margin-top: 4px; }
+
+  /* PWS Steps */
+  .pws-steps { }
+  .pws-step {
+    display: flex; gap: 14px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .pws-step:last-child { border-bottom: none; }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .pws-step:nth-child(1) .step-num { background: #EEE8F5; color: var(--c2); }
+  .pws-step:nth-child(2) .step-num { background: #E5F2EC; color: var(--c3); }
+  .pws-step:nth-child(3) .step-num { background: #FCEAED; color: var(--c1); }
+  .pws-step:nth-child(4) .step-num { background: #FBF5EB; color: var(--c4); }
+  .pws-step:nth-child(5) .step-num { background: #F0EEF8; color: var(--c2); }
+  .pws-step:nth-child(6) .step-num { background: #FCEAED; color: var(--c1); }
+  .pws-step:nth-child(7) .step-num { background: #E5F2EC; color: var(--c3); }
+  .pws-step:nth-child(8) .step-num { background: #EEE8F5; color: var(--c2); }
+  .pws-step:nth-child(9) .step-num { background: #FBF5EB; color: var(--c4); }
+
+  .step-content { flex: 1; }
+  .step-name {
+    font-size: 12px; font-weight: 600;
+    color: var(--ink); margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .step-text { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .step-q {
+    font-style: italic;
+    color: var(--ink);
+    background: var(--cream);
+    border-left: 2px solid var(--border-strong);
+    padding: 6px 10px;
+    margin-top: 6px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .step-examples {
+    font-size: 12px; color: var(--ink-muted);
+    margin-top: 5px; font-style: italic;
+  }
+
+  /* Loading block */
+  .loading-block {
+    background: var(--ink);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-top: 14px;
+  }
+  .loading-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .loading-text {
+    font-size: 13.5px; color: rgba(253,250,247,0.85);
+    line-height: 1.7; font-style: italic;
+  }
+  .loading-identity {
+    margin-top: 12px; padding-top: 12px;
+    border-top: 0.5px solid rgba(255,255,255,0.15);
+    font-size: 13px; color: rgba(253,250,247,0.6);
+  }
+  .loading-identity strong {
+    color: white; font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+  }
+
+  /* Style practice */
+  .style-weeks { display: flex; flex-direction: column; gap: 10px; }
+  .style-week {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border);
+  }
+  .week-pill {
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  }
+  .style-week:nth-child(1) .week-pill { background: var(--c2); color: white; }
+  .style-week:nth-child(2) .week-pill { background: var(--c3); color: white; }
+  .style-week:nth-child(3) .week-pill { background: var(--c1); color: white; }
+  .style-week p { margin: 0; font-size: 13px; }
+
+  /* Funnel page */
+  .funnel-flow {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .funnel-step {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex; gap: 16px;
+  }
+  .funnel-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    color: var(--border-strong);
+    flex-shrink: 0; line-height: 1;
+    margin-top: 2px;
+  }
+  .funnel-title { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .funnel-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 0; }
+
+  .channel-cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-top: 14px;
+  }
+  @media (max-width: 480px) { .channel-cards { grid-template-columns: 1fr; } }
+
+  .channel-card {
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .channel-name {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-muted); margin-bottom: 8px;
+  }
+  .channel-text { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+
+  .divider { height: 0.5px; background: var(--border); margin: 16px 0; }
+
+  .bridge-box {
+    background: linear-gradient(135deg, #1C1815 0%, #2D2520 100%);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-top: 14px;
+  }
+  .bridge-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .bridge-text {
+    font-size: 13.5px; color: rgba(253,250,247,0.85);
+    line-height: 1.7; font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-label">Инструмент практика · Виктория Бюргиссер</div>
+  <div class="header-title">Карточки-<em>гид</em></div>
+  <div class="header-sub">Полная методология по четырём категориям. Теория, визуальные маркеры, PWS-сессия, загрузки, воронка в курс.</div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" data-tab="1" onclick="showTab('1', this)"><span class="tab-dot"></span>Женственность</div>
+  <div class="nav-tab" data-tab="2" onclick="showTab('2', this)"><span class="tab-dot"></span>Проявление себя</div>
+  <div class="nav-tab" data-tab="3" onclick="showTab('3', this)"><span class="tab-dot"></span>Восприятие тела</div>
+  <div class="nav-tab" data-tab="4" onclick="showTab('4', this)"><span class="tab-dot"></span>Не отсвечивать</div>
+  <div class="nav-tab" data-tab="funnel" onclick="showTab('funnel', this)"><span class="tab-dot"></span>Воронка в курс</div>
+</div>
+
+<div class="main">
+
+<!-- ====== КАТЕГОРИЯ 1 — ЖЕНСТВЕННОСТЬ ====== -->
+<div class="cat-page active" id="tab-1">
+
+  <div class="card-strip" data-cat="1">
+    <div class="strip-label">Категория 1</div>
+    <div class="strip-title">Женственность и её проявления</div>
+    <div class="strip-sub">Подавленный Lover · Earth или Water в тени · Murdock Step 6–7</div>
+    <div class="meta-row">
+      <span class="meta-tag accent-tag">Lover подавлен</span>
+      <span class="meta-tag">Earth / Water</span>
+      <span class="meta-tag">Step 6–7 Murdock</span>
+      <span class="meta-tag">2 участницы</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-theory">◈</span>Теоретическая основа</div>
+    <p>По Robbins — архетип Lover: связь, чувственность, радость, смысл. Когда Lover подавлен, женщина технически функционирует но эмоционально инертна. Её работа не вызывает у неё самой чувств, тело не является домом, красота — не для неё.</p>
+    <p>По Murdock — Step 6: «Urgent Yearning to Reconnect with the Feminine». Она уже прошла отделение (Step 1), идентификацию с маскулинными ценностями (Step 2), испытания (Step 3). Что-то потребовало выключить женскую часть. Теперь она тоскует по ней — поэтому она здесь.</p>
+    <p>По Moore/Gillette — Lover в пассивной тени (collapsed Lover): «технически превосходная, но эмоционально мёртвая». Earth в тени: даёт всем, себе — нет. Красота воспринимается как эгоизм. Water в тени: глубина и чувственность заморожены под защитным льдом.</p>
+    <p>Шестая потребность которую встречает блок: <strong>Love/Connection</strong> — «если стану видимой как женщина, стану уязвимой» и <strong>Certainty</strong> — «если остаюсь в роли, меня не разочаруют».</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-visual">◉</span>Визуальные маркеры блока — что видишь глазами</div>
+    <ul class="marker-list">
+      <li>Функциональная одежда — удобная, нейтральная. Слово «практичная» звучит часто.</li>
+      <li>Украшений нет или минимум — «некогда», «не для работы», «не для моего возраста»</li>
+      <li>Палитра: бежевый, серый, тёмно-синий, чёрный. Цвет как камуфляж.</li>
+      <li>Походка быстрая и деловая — тело в режиме задачи, не присутствия</li>
+      <li>Плечи чуть вперёд или напряжены. Голова слегка опущена.</li>
+      <li>Волосы убраны — не уложены, а именно убраны «чтобы не мешали»</li>
+      <li>Духи — только на выход, если вообще есть</li>
+      <li>Тело несёт себя эффективно, не с удовольствием</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-phrases">«»</span>Типичные фразы из анкеты и что они означают</div>
+    <ul class="phrase-list">
+      <li><div class="phrase-text">«Некогда думать о красоте»</div><div class="phrase-note">→ Lover принесён в жертву роли. Точка входа: что случится если будет время?</div></li>
+      <li><div class="phrase-text">«Это для других, не для меня»</div><div class="phrase-note">→ Диссоциация от себя как женщины. Вопрос: когда ты стала «другой»?</div></li>
+      <li><div class="phrase-text">«Было всё это — но потом пришлось стать сильной»</div><div class="phrase-note">→ Точка перелома. Туда идём в сессии как в первичную ситуацию.</div></li>
+      <li><div class="phrase-text">«Не заслуживаю красивого»</div><div class="phrase-note">→ Убеждение что удовольствие надо заработать. Корень в Earth элементе.</div></li>
+      <li><div class="phrase-text">«Потеряла женственность из-за всех событий»</div><div class="phrase-note">→ Внешняя причина как объяснение внутреннего выключения. Работаем с телом.</div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-pws">▶</span>PWS сессия — полная последовательность</div>
+    <div class="pws-steps">
+      <div class="pws-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-name">Якорь безопасности</div>
+          <div class="step-q">«Закрой глаза. Три глубоких выдоха. Представь пространство где тебе полностью безопасно и тепло. Что видишь? Что чувствуешь в теле прямо сейчас?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-name">Образ желаемого</div>
+          <div class="step-q">«Представь себя — женственной, живой, в своей силе. Как ты выглядишь? Что на тебе? Как держишь тело? Что чувствуешь — и где именно в теле?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-name">Страх / вторичная выгода</div>
+          <div class="step-q">«Что страшного могло бы случиться если ты снова стала такой? Что потеряешь?»</div>
+          <div class="step-examples">Типичные ответы: «подумают что я эгоистична» / «стану уязвимой» / «некогда — есть обязательства» / «привлеку ненужное внимание»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-name">Первичная ситуация</div>
+          <div class="step-q">«Когда впервые тебе дали понять что быть женственной — опасно, эгоистично, неуместно или «не для тебя»? Вернись туда. Кто там? Что происходит?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-name">Животная метафора</div>
+          <div class="step-q">«Если бы твоя женственность была животным — какое оно? Где оно сейчас — на воле или в клетке? Что оно хочет сделать прямо сейчас?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-name">Выгрузка</div>
+          <div class="step-text">Проговариваете по слову, она повторяет за тобой:</div>
+          <div class="step-q">«Подавить... Спрятать... Убрать... Не заслуживать... Ждать разрешения... Быть функцией а не женщиной... Потерять себя в роли...»</div>
+          <div class="step-examples">Три глубоких вдоха-выдоха после каждого блока</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-name">Загрузка нового</div>
+          <div class="loading-block">
+            <div class="loading-label">Загрузка</div>
+            <div class="loading-text">«Загружаем: как это — позволять себе быть женщиной не за заслуги, не когда всё сделано, не когда похудела, не когда все довольны. Просто потому что ты ею являешься. Без того чтобы это было эгоизмом. Без того чтобы нужно было заслужить красоту.»</div>
+            <div class="loading-identity">Идентичность: <strong>«Моя женственность — не награда. Это то что я есть.»</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-name">Проверка в ситуации</div>
+          <div class="step-q">«Вернись туда — в тот момент когда тебе дали понять что женственность не для тебя. Что происходит сейчас в теле?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-name">Загрузка идентичности</div>
+          <div class="step-q">«Повтори три раза стоя, открытое тело, полный голос: Я — женщина. Это не роль. Это не заслуга. Это то что я есть.»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-shift">→</span>Визуальные маркеры сдвига</div>
+    <ul class="shift-list">
+      <li>Появляется тёплый цвет — персик, пудра, терракот вместо серого</li>
+      <li>Появляется одно украшение в обычный день — не парадный, а будничный</li>
+      <li>Походка замедляется. Есть момент где она «несёт себя» а не «идёт к цели»</li>
+      <li>Голова чуть приподнята, подбородок не опущен</li>
+      <li>Начинает говорить о себе как о женщине а не как о функции</li>
+      <li>В дневнике: «надела то платье», «купила серьги просто так», «нанесла духи утром без повода»</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-style">✦</span>Стилистические практики между сессиями</div>
+    <div class="style-weeks">
+      <div class="style-week"><span class="week-pill">Нед. 1</span><p>Одна вещь которая нравится — не «подходит» а нравится. Надеть дома. Побыть в ней час без выхода. Замечать тело.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 2</span><p>Одно украшение в обычный день. Не объяснять зачем. Замечать когда хочется снять и когда забывает что оно есть.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 3</span><p>Замедлить походку. Один раз в день — чувствовать тело в движении, не как инструмент а как присутствие.</p></div>
+    </div>
+    <div class="bridge-box">
+      <div class="bridge-label">Мост в Код Проявленности</div>
+      <div class="bridge-text">«То что ты почувствовала за эти три недели — это только первый слой. В Код Проявленности мы идём глубже: находим твой личный цветовой код, твой архетипный силуэт, строим систему где каждое утро когда ты одеваешься — ты возвращаешься к себе, не уходишь от себя.»</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== КАТЕГОРИЯ 2 — ПРОЯВЛЕНИЕ СЕБЯ ====== -->
+<div class="cat-page" id="tab-2">
+
+  <div class="card-strip" data-cat="2">
+    <div class="strip-label">Категория 2</div>
+    <div class="strip-title">Проявление себя</div>
+    <div class="strip-sub">Невидимый Эксперт · Water или Metal в тени · Murdock Step 3–4</div>
+    <div class="meta-row">
+      <span class="meta-tag accent-tag">Weakling Sovereign</span>
+      <span class="meta-tag">Water / Metal</span>
+      <span class="meta-tag">Step 3–4 Murdock</span>
+      <span class="meta-tag">2 участницы</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-theory">◈</span>Теоретическая основа</div>
+    <p>По Robbins — «Brilliant Invisible Expert»: Magician без структуры + Weakling Sovereign. Есть видение (Magician) но нет команды на выход (Sovereign). Warrior заблокирован страхом оценки — не может нанести удар в публичное пространство.</p>
+    <p>Water в тени: «Должна быть совершенной прежде чем говорить.» Паралич перед действием. Бесконечная подготовка как способ не выходить. Metal/Air в тени: «Должна понять всё прежде чем выйти.» «Ещё не готова» = «ещё не совершенна».</p>
+    <p>По Murdock — Step 3 (Road of Trials) или Step 4 (Illusory Boon). В Step 3 борется с синдромом самозванца. В Step 4 уже достигла — есть знания, результаты — но ощущение пустое потому что проявляется не она а «правильная версия».</p>
+    <p>Шестая потребность: <strong>Certainty</strong> — не выходить = точно не провалюсь. <strong>Significance</strong> — если выйду и не оценят, это невыносимо.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-visual">◉</span>Визуальные маркеры блока</div>
+    <ul class="marker-list">
+      <li>Одежда нейтральная, качественная, но без акцента — «чтобы говорила работа, не одежда»</li>
+      <li>Тело немного меньше когда называет себя. Голос тише — о себе. Громче — о теме.</li>
+      <li>Руки часто закрыты или прижаты к телу в моменты называния себя</li>
+      <li>Есть вещи «для важных случаев» — случаи не наступают</li>
+      <li>Хороший вкус, но всё в одном регистре — нет контраста, нет личной подписи</li>
+      <li>Плечи при представлении себя — чуть вперёд или напрягаются</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-phrases">«»</span>Типичные фразы и что они означают</div>
+    <ul class="phrase-list">
+      <li><div class="phrase-text">«Ещё не готова»</div><div class="phrase-note">→ Water перфекционизм. Вопрос: к чему именно? Что значит «готова»?</div></li>
+      <li><div class="phrase-text">«Кто я такая чтобы об этом говорить»</div><div class="phrase-note">→ Weakling Sovereign. Её вопрос Girl Psychology: нужно разрешение извне.</div></li>
+      <li><div class="phrase-text">«Сначала нужно ещё поучиться»</div><div class="phrase-note">→ Growth потребность как избегание. Знание как щит от видимости.</div></li>
+      <li><div class="phrase-text">«Говорю о теме легко — о себе страшно»</div><div class="phrase-note">→ Диссоциация между экспертностью и идентичностью. Это точка входа.</div></li>
+      <li><div class="phrase-text">«Молчала бы и не вставляла пять копеек»</div><div class="phrase-note">→ Буквальная цитата Светы. Самоцензура как автоматическая реакция.</div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-pws">▶</span>PWS сессия</div>
+    <div class="pws-steps">
+      <div class="pws-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-name">Якорь</div>
+          <div class="step-q">«Закрой глаза. Три выдоха. Белая комната — безопасно и тепло.»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-name">Образ проявленности</div>
+          <div class="step-q">«Представь себя говорящей о своей работе — легко, уверенно, с удовольствием. Что происходит в теле прямо сейчас в этом образе?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-name">Страх</div>
+          <div class="step-q">«Что самое страшное случится если тебя услышат и увидят? Первый образ — не мысль.»</div>
+          <div class="step-examples">Типичные: «осудят» / «разоблачат» / «подумают что много о себе думаю» / «провалюсь публично»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-name">Вторичная выгода невидимости</div>
+          <div class="step-q">«Что хорошего в том что ты пока не проявляешься? Что это тебе даёт?»</div>
+          <div class="step-examples">Безопасность, не нужно рисковать, не нужно держать планку, не нужно разочаровывать</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-name">Первичная ситуация</div>
+          <div class="step-q">«Когда первый раз тебе дали понять что лучше не высовываться? Или что твоё мнение — лишнее? Вернись туда. Почувствуй где это в теле.»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-name">Животная метафора</div>
+          <div class="step-q">«Если бы твой голос был животным — какое оно? Где оно прячется? Что оно хочет сделать?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-name">Выгрузка</div>
+          <div class="step-q">«Молчать... Ждать разрешения... Быть невидимой... Доказывать что достойна... Бояться что разоблачат... Уменьшать себя чтобы не мешать...»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-name">Загрузка</div>
+          <div class="loading-block">
+            <div class="loading-label">Загрузка</div>
+            <div class="loading-text">«Загружаем: как это — говорить о своей работе с той же лёгкостью с которой ты думаешь о ней. Без того чтобы сначала получить разрешение. Без того чтобы быть совершенной прежде чем занять пространство. Моя видимость — это часть моей услуги.»</div>
+            <div class="loading-identity">Идентичность: <strong>«Я говорю — и этого достаточно. Мой голос имеет право звучать.»</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-name">Проверка + идентичность</div>
+          <div class="step-q">«Вернись в ту первую ситуацию. Что сейчас в теле? Как ты там стоишь? Повтори три раза: Я говорю — и этого достаточно.»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-shift">→</span>Визуальные маркеры сдвига</div>
+    <ul class="shift-list">
+      <li>Появляется один намеренный акцент в образе — яркий элемент, необычная деталь</li>
+      <li>Голос ровный когда говорит о себе и когда о теме — одинаковый</li>
+      <li>Тело не меняется когда называет цену или представляется</li>
+      <li>Она начинает говорить «я» без предисловия и без извинения перед ним</li>
+      <li>В дневнике: «надела яркое перед звонком», «записала голосовое и не удалила»</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-style">✦</span>Стилистические практики</div>
+    <div class="style-weeks">
+      <div class="style-week"><span class="week-pill">Нед. 1</span><p>Один яркий элемент перед важным разговором или звонком. Замечать как меняется голос и тело.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 2</span><p>Голосовое самой себе — одна минута о том что умею. Прослушать. Не удалять.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 3</span><p>Фото в образе который считает «своим». Три слова о женщине на фото.</p></div>
+    </div>
+    <div class="bridge-box">
+      <div class="bridge-label">Мост в Код Проявленности</div>
+      <div class="bridge-text">«Мы нашли точку где твой голос застрял. В Код Проявленности мы создаём систему: твой архетип Мага получает структуру Суверена, твой визуальный код становится твоей подписью, и выходить вперёд перестаёт требовать усилия — потому что снаружи наконец соответствует тому кто ты есть внутри.»</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== КАТЕГОРИЯ 3 — ВОСПРИЯТИЕ ТЕЛА ====== -->
+<div class="cat-page" id="tab-3">
+
+  <div class="card-strip" data-cat="3">
+    <div class="strip-label">Категория 3</div>
+    <div class="strip-title">Восприятие своего тела</div>
+    <div class="strip-sub">Frozen Lover на уровне тела · Metal или Wood в тени · Murdock Step 1–2</div>
+    <div class="meta-row">
+      <span class="meta-tag accent-tag">Lover заморожен</span>
+      <span class="meta-tag">Metal / Wood</span>
+      <span class="meta-tag">Step 1–2 Murdock</span>
+      <span class="meta-tag">2 участницы</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-theory">◈</span>Теоретическая основа</div>
+    <p>Глубочайший уровень подавления Lover — само тело превращено в «объект доработки». Тело стало проектом который «ещё не готов» а не домом в котором она живёт.</p>
+    <p>По Murdock — Step 1–2: Separation from the Feminine / Identification with Masculine. Тело оценивается по маскулинным стандартам (производительность, форма, функция) а не проживается по женским (удовольствие, принятие, присутствие).</p>
+    <p>Metal/Air в тени: «Должна соответствовать стандарту прежде чем позволить себе.» Это Perfectionist — тело как задача с невыполненным дедлайном. Wood в тени: тело как проект который надо «решить» — диеты, планы, дедлайны на трансформацию.</p>
+    <p>Шестая потребность: <strong>Certainty</strong> — «когда похудею, всё будет предсказуемо и я наконец смогу». Тело-условие как способ контролировать неопределённость.</p>
+    <p>Яркий маркер из анкеты: <em>«Ох как я это не люблю))) пока не похудею»</em> — это буквальная формулировка блока. Именно эту фразу — в работу.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-visual">◉</span>Визуальные маркеры блока</div>
+    <ul class="marker-list">
+      <li>Оверсайз, слои, тёмный низ + светлый верх — классическая стратегия скрытия</li>
+      <li>Мягкие бесформенные ткани — «не давит и не показывает»</li>
+      <li>Ничего облегающего, закрытые зоны тела</li>
+      <li>Цвета сдержанные, без акцентов</li>
+      <li>Тело в одежде «упаковано» а не одето</li>
+      <li>Жесты прикрывающие — рука на животе, скрещенные руки</li>
+      <li>Когда говорит о теле — список претензий, не описание</li>
+      <li>Избегает зеркало в полный рост или смотрит только на лицо</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-phrases">«»</span>Типичные фразы</div>
+    <ul class="phrase-list">
+      <li><div class="phrase-text">«Пока не похудею»</div><div class="phrase-note">→ Главный симптом. Вопрос: сколько лет ты уже ждёшь? Что именно откроется потом?</div></li>
+      <li><div class="phrase-text">«Не для моей фигуры»</div><div class="phrase-note">→ Тело как ограничение. Убеждение что красота требует «правильного» тела.</div></li>
+      <li><div class="phrase-text">«Красивое — для других»</div><div class="phrase-note">→ Lover отключён на уровне тела. Себя исключила из тех кому можно.</div></li>
+      <li><div class="phrase-text">«Не смотрю в зеркало полностью»</div><div class="phrase-note">→ Диссоциация. Первичная ситуация скорее всего связана с оценкой тела другим.</div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-pws">▶</span>PWS сессия</div>
+    <div class="pws-steps">
+      <div class="pws-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-name">Якорь в теле — особенно важен здесь</div>
+          <div class="step-q">«Закрой глаза. Почувствуй стул под собой. Ноги на полу. Три выдоха — каждый выдох чуть длиннее. Позволь телу быть здесь. Не нужно ничего менять — просто почувствуй что оно есть.»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-name">Образ принятия — прямо сейчас</div>
+          <div class="step-q">«Представь себя — в своём теле, в красивой одежде которая тебе нравится, прямо сейчас. Не в будущем теле — в этом. Что происходит в теле когда ты это представляешь?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-name">Страх</div>
+          <div class="step-q">«Что страшного случится если ты позволишь себе красивую одежду прямо сейчас, до изменений тела?»</div>
+          <div class="step-examples">«подумают что мне всё равно» / «буду выглядеть смешно» / «это только подчеркнёт» / «не заслуживаю пока не...»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-name">Вторичная выгода условия</div>
+          <div class="step-q">«Что хорошего в том что ты ждёшь? Что ты получаешь пока ждёшь?»</div>
+          <div class="step-examples">Не нужно рисковать / есть «причина» не появляться / есть «план» / тело как объяснение почему ещё нет</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-name">Первичная ситуация</div>
+          <div class="step-q">«Когда впервые тебе дали понять что твоё тело «не то»? Кто это был? Что произошло? Где ты это чувствуешь сейчас в теле?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-name">Животная метафора</div>
+          <div class="step-q">«Если бы твоё тело было животным которое долго прятали или запрещали — какое оно? Что оно хочет сделать когда выйдет?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-name">Выгрузка</div>
+          <div class="step-q">«Стыдиться... Прятать... Ждать... Наказывать тело... Условие на право быть... Тело как проблема которую надо решить... Отложить на потом...»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-name">Загрузка</div>
+          <div class="loading-block">
+            <div class="loading-label">Загрузка</div>
+            <div class="loading-text">«Загружаем: как это — жить в своём теле сейчас. Не в теле которое будет потом. Без того чтобы ставить условие на право нравиться себе. Без того чтобы тело должно было что-то доказать прежде чем получить красивую одежду.»</div>
+            <div class="loading-identity">Идентичность: <strong>«Моё тело — мой дом. Прямо сейчас. Без условий.»</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-name">Проверка + идентичность</div>
+          <div class="step-q">«Вернись в первую ситуацию. Что в теле сейчас? Повтори три раза: Моё тело — мой дом. Прямо сейчас. Без условий.»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-shift">→</span>Визуальные маркеры сдвига</div>
+    <ul class="shift-list">
+      <li>Появляется вещь «с посадкой» — не обязательно облегающая, но по фигуре</li>
+      <li>Открывается одна зона тела которая раньше была спрятана — запястье, шея, плечо</li>
+      <li>Цвет теплее — уходит от серого и тёмного к тёплым тонам</li>
+      <li>Она описывает тело без автоматического списка претензий</li>
+      <li>В дневнике: «надела то платье», «вышла без кардигана», «купила что нравится а не что скрывает»</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-style">✦</span>Стилистические практики</div>
+    <div class="style-weeks">
+      <div class="style-week"><span class="week-pill">Нед. 1</span><p>Зеркало в полный рост. Одна минута. Просто смотреть — не оценивать. Записать что первым бросилось в глаза и было ли что-то что понравилось.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 2</span><p>Одна вещь из «когда похудею» — надеть дома. Замечать как тело реагирует. Есть ли момент когда становится комфортнее.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 3</span><p>Один притягивающий цвет — примерить в магазине или дома. Не обязательно купить. Просто побыть с ним. Что происходит.</p></div>
+    </div>
+    <div class="bridge-box">
+      <div class="bridge-label">Мост в Код Проявленности</div>
+      <div class="bridge-text">«Мы разбили условие. В Код Проявленности ты получишь свою архитектуру — 12 типов тела, 5 осей силуэта, палитру которая работает с твоей природой а не против неё. И ты поймёшь: одеться красиво в этом теле прямо сейчас — это не капитуляция. Это акт самоавторства.»</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== КАТЕГОРИЯ 4 — НЕ ОТСВЕЧИВАТЬ ====== -->
+<div class="cat-page" id="tab-4">
+
+  <div class="card-strip" data-cat="4">
+    <div class="strip-label">Категория 4</div>
+    <div class="strip-title">Не отсвечивать</div>
+    <div class="strip-sub">Weakling Sovereign · Water или Earth в параличе · Murdock Step 1–2 или Step 5</div>
+    <div class="meta-row">
+      <span class="meta-tag accent-tag">Weakling Sovereign</span>
+      <span class="meta-tag">Water / Earth</span>
+      <span class="meta-tag">Step 1–2 или 5</span>
+      <span class="meta-tag">2 участницы</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-theory">◈</span>Теоретическая основа</div>
+    <p>По Moore/Gillette — пассивная тень Sovereign: Weakling. Она отдала своё право на присутствие. Warrior заблокирован — не может выйти вперёд без сигнала что безопасно. Girl Psychology в самом чистом виде: нужно разрешение чтобы занять пространство.</p>
+    <p>Water в параличе: «Должна быть совершенной прежде чем быть видимой.» Страх что если заметят — заметят и недостатки. Earth в тени: «Должна быть принятой прежде чем проявиться.» Одобрение как условие существования.</p>
+    <p>По Murdock два варианта. Step 1–2: программа «не высовывайся» никогда не ставилась под вопрос — пришла из семьи, культуры. Это воздух в котором выросла. Step 5 (Descent): что-то произошло что заставило уйти в невидимость — публичное унижение, отвержение, предательство.</p>
+    <p>Прямая цитата из анкеты Светы: <em>«Весь нутро мне кричит что я должна идти в массы. А я залезаю в раковинку»</em> — классическая картина заблокированного Warrior + Weakling Sovereign. Нутро знает. Тело боится.</p>
+    <p>Шестая потребность: <strong>Love/Connection</strong> — «если стану заметной, могут отвергнуть». <strong>Certainty</strong> — «невидимая = точно не провалюсь».</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-visual">◉</span>Визуальные маркеры блока — самый характерный тип</div>
+    <ul class="marker-list">
+      <li>Одежда буквально сливается с фоном — монохромная, тёмная, без контраста</li>
+      <li>Ничего создающего линию или акцент. Минимум украшений или полное отсутствие.</li>
+      <li>Тело занимает меньше места чем могло бы — руки близко, шаг небольшой, плечи вперёд</li>
+      <li>Голос тихий в группе, громче один на один</li>
+      <li>Тенденция быстро уйти из пространства после окончания взаимодействия</li>
+      <li>Голова чуть опущена в ситуациях публичности</li>
+      <li>Намеренно не покупает красивое — «не для меня» как твёрдая установка</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-phrases">«»</span>Типичные фразы</div>
+    <ul class="phrase-list">
+      <li><div class="phrase-text">«Одеваюсь чтобы не привлекать внимание»</div><div class="phrase-note">→ Буквальная стратегия. Одежда как инструмент исчезновения.</div></li>
+      <li><div class="phrase-text">«Когда на меня смотрят хочется стать меньше»</div><div class="phrase-note">→ Телесный паттерн. Работаем именно с этим в теле, не в голове.</div></li>
+      <li><div class="phrase-text">«Не хочу чтобы подумали что я выпендриваюсь»</div><div class="phrase-note">→ Страх превосходства. Корень часто в семейном «не высовывайся».</div></li>
+      <li><div class="phrase-text">«Молчала бы Света и не вставляла пять копеек»</div><div class="phrase-note">→ Буквальная самоцензура вслух. Это важная цитата для начала сессии.</div></li>
+      <li><div class="phrase-text">«Внутри есть что-то большее но выпустить страшно»</div><div class="phrase-note">→ Осознанность при заблокированном выходе. Она уже видит и уже хочет.</div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-pws">▶</span>PWS сессия</div>
+    <div class="pws-steps">
+      <div class="pws-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-name">Якорь и безопасность — особенно важен</div>
+          <div class="step-q">«Закрой глаза. Ты в безопасном пространстве. Три выдоха. Почувствуй что здесь можно быть. Тебя здесь никто не оценивает.»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-name">Образ видимости — здесь часто сразу реакция</div>
+          <div class="step-q">«Представь себя — тебя видят, тебя слышат, на тебя обращают внимание. Что происходит в теле прямо сейчас?»</div>
+          <div class="step-examples">Здесь часто сразу идёт сжатие, желание исчезнуть, страх. Это и есть материал — не торопи.</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-name">Страх</div>
+          <div class="step-q">«Что самое страшное случится если тебя заметят? Первый образ — не мысль.»</div>
+          <div class="step-examples">«осудят» / «позавидуют» / «подумают что зазналась» / «провалюсь и все увидят» / «нападут»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-name">Вторичная выгода невидимости</div>
+          <div class="step-q">«Что хорошего в том что тебя не замечают? Что ты получаешь?»</div>
+          <div class="step-examples">Безопасность / не нужно держать планку / не нужно разочаровывать / не нужно защищаться</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-name">Первичная ситуация</div>
+          <div class="step-q">«Когда первый раз тебе дали понять что лучше не высовываться? Или что привлекать внимание — опасно? Вернись туда. Кто там? Что происходит в теле?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-name">Животная метафора</div>
+          <div class="step-q">«Если бы внутри тебя было животное которое хочет выйти — какое оно? Где оно сейчас? Что оно делает чтобы оставаться невидимым? Что бы оно сделало если бы знало что безопасно?»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-name">Выгрузка</div>
+          <div class="step-q">«Сжаться... Спрятаться... Стать меньше... Ждать разрешения... Быть прозрачной... Бояться что заметят... Одежда говорит «меня здесь нет»...»</div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-name">Загрузка</div>
+          <div class="loading-block">
+            <div class="loading-label">Загрузка</div>
+            <div class="loading-text">«Загружаем: как это — занимать пространство которое тебе принадлежит. Без того чтобы сначала получить разрешение. Без того чтобы извиняться за своё присутствие. Без того чтобы одежда говорила «меня здесь нет» когда ты есть.»</div>
+            <div class="loading-identity">Идентичность: <strong>«Я имею право быть здесь. Я имею право быть увиденной. Моё присутствие — это не нападение.»</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="pws-step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-name">Проверка + идентичность</div>
+          <div class="step-q">«Вернись в первую ситуацию. Что в теле сейчас? Встань прямо. Повтори три раза: Я имею право быть здесь. Я имею право быть увиденной.»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-shift">→</span>Визуальные маркеры сдвига</div>
+    <ul class="shift-list">
+      <li>Появляется один цвет которого раньше не было — пусть в аксессуаре</li>
+      <li>Тело начинает занимать чуть больше места — шаг шире, плечи назад, голова прямее</li>
+      <li>Она задерживается в пространстве вместо того чтобы быстро уйти</li>
+      <li>Начинает замечать когда на неё смотрят — без немедленного желания исчезнуть</li>
+      <li>В дневнике: «надела яркое», «не ушла сразу», «ответила громче чем обычно»</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-style">✦</span>Стилистические практики</div>
+    <div class="style-weeks">
+      <div class="style-week"><span class="week-pill">Нед. 1</span><p>Одна деталь чуть заметнее чем обычно — яркий шарф, серьги, сумка другого цвета. Выйти в этом. Замечать реакцию людей и реакцию тела.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 2</span><p>Замедлить шаг на 20%. Плечи открыть, голова прямо. Замечать как меняется восприятие пространства и что происходит внутри когда занимает больше места.</p></div>
+      <div class="style-week"><span class="week-pill">Нед. 3</span><p>Надеть «слишком красивое» для обычного дня. Не объяснять зачем. Замечать в какой момент хочется стать меньше — и остаться.</p></div>
+    </div>
+    <div class="bridge-box">
+      <div class="bridge-label">Мост в Код Проявленности</div>
+      <div class="bridge-text">«Мы нашли где твоё присутствие было заблокировано. В Код Проявленности ты получишь свой визуальный код который говорит «я здесь» до того как ты открыла рот. Твой архетип, твоя палитра, твой силуэт — система которая каждый день возвращает тебя к праву занимать пространство.»</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== ВОРОНКА В КУРС ====== -->
+<div class="cat-page" id="tab-funnel">
+
+  <div class="card-strip" data-cat="funnel" style="background: linear-gradient(135deg, #1C1815 0%, #2D2520 100%); border: none;">
+    <div class="strip-label" style="color: var(--gold);">Стратегия</div>
+    <div class="strip-title" style="color: white;">Воронка из фокус-группы в курс</div>
+    <div class="strip-sub" style="color: rgba(253,250,247,0.5);">Три потока · Восемь участниц · Один курс</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-funnel">→</span>Три потока в курс</div>
+    <div class="channel-cards">
+      <div class="channel-card">
+        <div class="channel-name">Поток 1 — Участницы</div>
+        <div class="channel-text">Они уже внутри метода, почувствовали результат, доверяют тебе. Самый тёплый вход — личное приглашение после финальной сессии.</div>
+      </div>
+      <div class="channel-card">
+        <div class="channel-name">Поток 2 — Telegram</div>
+        <div class="channel-text">Наблюдатели канала видят посты о процессе и узнают себя в одной из четырёх тем. Посты о трансформации — лучший контент для привлечения.</div>
+      </div>
+      <div class="channel-card">
+        <div class="channel-name">Поток 3 — PWS практики</div>
+        <div class="channel-text">Другие PWS специалисты видят как ты интегрируешь соматику со стилем. Потенциальные студенты продвинутого курса для практиков.</div>
+      </div>
+      <div class="channel-card">
+        <div class="channel-name">Масштабирование</div>
+        <div class="channel-text">Карточки-гид — основа обучающего продукта для PWS практиков. «Четыре архетипа через визуальный код» — мастер-класс или модуль курса.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-funnel">↓</span>Воронка для участниц — шаг за шагом</div>
+    <div class="funnel-flow">
+      <div class="funnel-step">
+        <div class="funnel-num">1</div>
+        <div>
+          <div class="funnel-title">Неделя 1 — Первый сдвиг</div>
+          <p class="funnel-desc">После первой сессии пишешь в личку: «Что заметила после нашей встречи? Что первым изменилось снаружи?» Цель: зафиксировать первый результат её словами. Это и поддержка процесса и материал для кейса.</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">2</div>
+        <div>
+          <div class="funnel-title">Неделя 2 — После архетипической сессии</div>
+          <p class="funnel-desc">В личке на следующий день: «Ты сказала что Lover отозвался сильнее всего. В Код Проявленности есть целый модуль именно про это — как перевести это ощущение в постоянную систему. Хочу показать тебе как это выглядит.» Создаёшь любопытство через личный опыт а не описание программы.</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">3</div>
+        <div>
+          <div class="funnel-title">Неделя 3 — Карта и следующий шаг</div>
+          <p class="funnel-desc">В финальной сессии показываешь карту: где она была, где сейчас, где следующий уровень. «Ты прошла первый слой. Вот что дальше.» Конкретное предложение: «Для участниц фокус-группы у меня есть специальные условия входа. Хочешь узнать?»</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">4</div>
+        <div>
+          <div class="funnel-title">После финальной анкеты — персональное</div>
+          <p class="funnel-desc">Читаешь финальную анкету каждой. Пишешь персонально — цитируя её собственные слова: «Ты написала что теперь позволяешь себе [цитата]. Это именно то с чего начинается Код Проявленности. Следующий шаг для тебя — [конкретно].»</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-funnel">◈</span>Контент-план для Telegram — из кейсов</div>
+    <div class="funnel-flow">
+      <div class="funnel-step">
+        <div class="funnel-num">↑</div>
+        <div>
+          <div class="funnel-title">Неделя 1 — Пост-открытие</div>
+          <p class="funnel-desc">«Начали фокус-группу. Четыре темы, восемь женщин. Первое что я заметила на встречах — [конкретное визуальное наблюдение без имён]. Это не про одежду. Это про то как мы разрешаем себе занимать пространство.»</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">↑</div>
+        <div>
+          <div class="funnel-title">Неделя 2 — Пост-процесс</div>
+          <p class="funnel-desc">«Что происходит когда женщина с темой [категория] надевает [конкретная вещь из задания]. Она написала мне: [цитата с согласия]. Вот что это значит через методологию Код Проявленности.»</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">↑</div>
+        <div>
+          <div class="funnel-title">Неделя 3 — Пост-трансформация</div>
+          <p class="funnel-desc">«Три слова которыми она описывала себя в начале: [слова из точки ноль]. Три слова сейчас: [слова из финального фото]. Что изменилось за три недели — и почему это началось не с гардероба.»</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">★</div>
+        <div>
+          <div class="funnel-title">Финальный пост — объявление курса</div>
+          <p class="funnel-desc">«Фокус-группа завершена. Вот что я поняла о четырёх типах блоков которые мешают женщинам проявляться. [Краткое описание каждого типа]. Если ты узнала себя — открываю Код Проявленности. [Ссылка / кодовое слово].»</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon ci-funnel">✦</span>Масштабирование в обучающий продукт</div>
+    <p>Карточки-гид которые ты держишь в руках — это не только твой рабочий инструмент. Это основа обучающего продукта для других PWS практиков.</p>
+    <div class="funnel-flow" style="margin-top:12px">
+      <div class="funnel-step">
+        <div class="funnel-num">A</div>
+        <div>
+          <div class="funnel-title">Мастер-класс для PWS практиков</div>
+          <p class="funnel-desc">«Четыре архетипа через визуальный код». Как интегрировать стиль и соматику в одну сессию. 2–3 часа онлайн.</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">B</div>
+        <div>
+          <div class="funnel-title">Модуль внутри основного курса</div>
+          <p class="funnel-desc">«Гид практика по четырём категориям» — как дополнительный блок для студентов Код Проявленности которые хотят работать с клиентами.</p>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-num">C</div>
+        <div>
+          <div class="funnel-title">Сертификационная программа</div>
+          <p class="funnel-desc">«Метод Виктории Бюргиссер: Inside Out» — полная методология для обучения других специалистов. Долгосрочный продукт с самым высоким чеком.</p>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:14px; font-size:13px; color:var(--ink-muted); font-style:italic;">После завершения фокус-группы у тебя будет: 8 живых кейсов · 4 карточки с полной методологией · Дневники с реальными наблюдениями · Финальные анкеты с результатами. Это готовый учебный материал.</p>
+  </div>
+
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(tab, el) {
+  document.querySelectorAll('.cat-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
