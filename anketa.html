@@ -431,7 +431,7 @@
 <div class="form-container">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
-  <form id="mainForm" novalidate onsubmit="handleSubmit(event)">
+  <form id="mainForm" onsubmit="handleSubmit(event)">
 
     <!-- РАЗДЕЛ 1: ЛИЧНЫЕ ДАННЫЕ -->
     <div class="section">
@@ -440,43 +440,43 @@
       <div class="field-row">
         <div class="field">
           <label class="field-label">Имя <span class="req">*</span></label>
-          <input type="text" name="firstName" required placeholder="Имя">
+          <input type="text" required name="firstName" required placeholder="Имя">
         </div>
         <div class="field">
           <label class="field-label">Фамилия <span class="req">*</span></label>
-          <input type="text" name="lastName" required placeholder="Фамилия">
+          <input type="text" required name="lastName" required placeholder="Фамилия">
         </div>
       </div>
 
       <div class="field">
         <label class="field-label">Дата рождения <span class="req">*</span></label>
-        <input type="date" name="dob" required>
+        <input type="date" required name="dob" required>
       </div>
 
       <div class="field">
         <label class="field-label">Телефон <span class="req">*</span></label>
-        <input type="tel" name="phone" required placeholder="+7 / +41 / +...">
+        <input type="tel" required name="phone" required placeholder="+7 / +41 / +...">
       </div>
 
       <div class="field">
         <label class="field-label">Email <span class="req">*</span></label>
-        <input type="email" name="email" required placeholder="your@email.com">
+        <input type="email" required name="email" required placeholder="your@email.com">
       </div>
 
       <div class="field">
         <label class="field-label">Telegram <span class="req">*</span></label>
-        <input type="text" name="telegram" required placeholder="@username">
+        <input type="text" required name="telegram" required placeholder="@username">
       </div>
 
       <div class="field">
         <label class="field-label">Город / страна проживания</label>
-        <input required type="text" name="city" placeholder="Например: Москва, Россия">
+        <input type="text" name="city" placeholder="Например: Москва, Россия">
       </div>
 
       <div class="field">
         <label class="field-label">Профессиональная деятельность <span class="req">*</span></label>
         <div class="field-hint">Чем ты занимаешься — основная деятельность, проект, роль</div>
-        <input type="text" name="profession" required placeholder="Например: коуч, дизайнер, предприниматель, мама...">
+        <input type="text" required name="profession" required placeholder="Например: коуч, дизайнер, предприниматель, мама...">
       </div>
     </div>
 
@@ -489,7 +489,7 @@
         <div class="cat-grid" style="margin-top: 12px;">
 
           <label class="cat-card" data-cat="1">
-            <input type="radio" name="category" value="1" required onchange="showCategory(1)">
+            <input type="radio" name="category" value="1" required required onchange="showCategory(1)">
             <div class="cat-card-inner">
               <div class="cat-dot"></div>
               <div class="cat-name">Женственность и её проявления</div>
@@ -564,7 +564,7 @@
 
       <div class="field">
         <label class="field-label">Опиши в двух-трёх предложениях что происходит в твоей жизни прямо сейчас в связи с этой темой</label>
-        <textarea required name="situation" placeholder="Своими словами, без редактуры..."></textarea>
+        <textarea name="situation" placeholder="Своими словами, без редактуры..."></textarea>
       </div>
     </div>
 
@@ -574,22 +574,22 @@
 
       <div class="field">
         <label class="field-label">Как ты себя чаще всего описываешь другим людям — в двух-трёх словах?</label>
-        <input required type="text" name="selfDesc" placeholder="Первое что приходит...">
+        <input type="text" name="selfDesc" placeholder="Первое что приходит...">
       </div>
 
       <div class="field">
         <label class="field-label">Что привело тебя именно сюда, именно сейчас?</label>
-        <textarea required name="whyNow" placeholder="Не думай — пиши..."></textarea>
+        <textarea name="whyNow" placeholder="Не думай — пиши..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Что должно измениться через три недели чтобы ты сказала «это сработало»? Опиши конкретно — не ощущение, а что ты будешь делать иначе.</label>
-        <textarea required name="successLooks" placeholder="Конкретное действие или поведение..."></textarea>
+        <textarea name="successLooks" placeholder="Конкретное действие или поведение..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Есть ли у тебя ощущение что ты «не такая как надо» — и если да, в чём именно?</label>
-        <textarea required name="notEnough" placeholder="Честно..."></textarea>
+        <textarea name="notEnough" placeholder="Честно..."></textarea>
       </div>
     </div>
 
@@ -600,30 +600,30 @@
       <div class="field">
         <label class="field-label">Открой шкаф прямо сейчас (или вспомни). Какие три цвета встречаются чаще всего?</label>
         <div class="color-triplet">
-          <input required type="text" name="color1" placeholder="Цвет 1">
-          <input required type="text" name="color2" placeholder="Цвет 2">
-          <input required type="text" name="color3" placeholder="Цвет 3">
+          <input type="text" name="color1" placeholder="Цвет 1">
+          <input type="text" name="color2" placeholder="Цвет 2">
+          <input type="text" name="color3" placeholder="Цвет 3">
         </div>
       </div>
 
       <div class="field">
         <label class="field-label">Есть ли в шкафу вещи которые висят нетронутыми — красивые, но «не для каждого дня»? Что это?</label>
-        <textarea required name="unusedClothes" placeholder="Опиши — что и почему лежит..."></textarea>
+        <textarea name="unusedClothes" placeholder="Опиши — что и почему лежит..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Что надеваешь когда нужно чувствовать себя уверенно — важная встреча, сложный разговор?</label>
-        <textarea required name="confidentOutfit" placeholder="Конкретный образ..."></textarea>
+        <textarea name="confidentOutfit" placeholder="Конкретный образ..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Что надеваешь когда никто не видит — дома, в выходной?</label>
-        <textarea required name="homeOutfit" placeholder="Честно..."></textarea>
+        <textarea name="homeOutfit" placeholder="Честно..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Есть ли цвета которые хочешь носить но не носишь? Почему?</label>
-        <textarea required name="forbiddenColors" placeholder="Какие цвета и что мешает..."></textarea>
+        <textarea name="forbiddenColors" placeholder="Какие цвета и что мешает..."></textarea>
       </div>
 
       <div class="field">
@@ -672,40 +672,40 @@
 
         <div class="field">
           <label class="field-label">Когда ты последний раз чувствовала себя по-настоящему женственной — не красивой для кого-то, а живой внутри как женщина? Опиши этот момент.</label>
-          <textarea required name="c1_lastFeminine" placeholder="Место, что было на тебе, что происходило..."></textarea>
+          <textarea name="c1_lastFeminine" placeholder="Место, что было на тебе, что происходило..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Что по-твоему забрало у тебя эту женственность? Не объясняй — просто назови.</label>
-          <textarea required name="c1_whatTook" placeholder="Первое что пришло..."></textarea>
+          <textarea name="c1_whatTook" placeholder="Первое что пришло..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Есть ли женщина — реальная или из кино, книги — в чьём образе ты видишь то что хочешь вернуть?</label>
-          <textarea required name="c1_roleModel" placeholder="Кто это и что именно в ней..."></textarea>
+          <textarea name="c1_roleModel" placeholder="Кто это и что именно в ней..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Если бы твоя женственность была цветом — каким?</label>
           <div class="field-row">
             <div>
               <div class="field-hint">Цвет женственности</div>
-              <input required type="text" name="c1_femColor" placeholder="Какой цвет...">
+              <input type="text" name="c1_femColor" placeholder="Какой цвет...">
             </div>
             <div>
               <div class="field-hint">Цвет который носишь сейчас</div>
-              <input required type="text" name="c1_nowColor" placeholder="Что сейчас в гардеробе...">
+              <input type="text" name="c1_nowColor" placeholder="Что сейчас в гардеробе...">
             </div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Есть ли вещь которую ты никогда не позволяешь себе надеть? Что это и почему именно она?</label>
-          <textarea required name="c1_forbidden" placeholder="Опиши и объясни..."></textarea>
+          <textarea name="c1_forbidden" placeholder="Опиши и объясни..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Закончи фразу: «Я позволю себе быть женственной когда...»</label>
-          <input required type="text" name="c1_when" placeholder="Когда...">
+          <input type="text" name="c1_when" placeholder="Когда...">
         </div>
         <div class="field">
           <label class="field-label">Что ты будешь делать иначе через три недели — конкретно, не ощущение?</label>
-          <textarea required name="c1_result" placeholder="Конкретное действие или поведение..."></textarea>
+          <textarea name="c1_result" placeholder="Конкретное действие или поведение..."></textarea>
         </div>
       </div>
     </div>
@@ -723,7 +723,7 @@
 
         <div class="field">
           <label class="field-label">Что ты знаешь, умеешь или создала — и пока держишь при себе? Назови конкретно.</label>
-          <textarea required name="c2_hidden" placeholder="Что именно и как давно..."></textarea>
+          <textarea name="c2_hidden" placeholder="Что именно и как давно..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Как давно ты это держишь при себе?</label>
@@ -750,11 +750,11 @@
         </div>
         <div class="field">
           <label class="field-label">Что самое страшное случится если тебя услышат? Напиши первое что пришло — без цензуры.</label>
-          <textarea required name="c2_fear" placeholder="Первый образ, не мысль..."></textarea>
+          <textarea name="c2_fear" placeholder="Первый образ, не мысль..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Было ли время когда ты проявлялась легко? Что тогда было иначе?</label>
-          <textarea required name="c2_before" placeholder="Что изменилось..."></textarea>
+          <textarea name="c2_before" placeholder="Что изменилось..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Как одеваешься когда нужно говорить о себе или своей работе?</label>
@@ -769,14 +769,14 @@
         <div class="field">
           <label class="field-label">Три цвета которые носишь когда нужно «выйти вперёд»</label>
           <div class="color-triplet">
-            <input required type="text" name="c2_color1" placeholder="Цвет 1">
-            <input required type="text" name="c2_color2" placeholder="Цвет 2">
-            <input required type="text" name="c2_color3" placeholder="Цвет 3">
+            <input type="text" name="c2_color1" placeholder="Цвет 1">
+            <input type="text" name="c2_color2" placeholder="Цвет 2">
+            <input type="text" name="c2_color3" placeholder="Цвет 3">
           </div>
         </div>
         <div class="field">
           <label class="field-label">Закончи фразу: «Я позволю себе заявить о себе когда...»</label>
-          <input required type="text" name="c2_when" placeholder="Когда...">
+          <input type="text" name="c2_when" placeholder="Когда...">
         </div>
       </div>
     </div>
@@ -794,11 +794,11 @@
 
         <div class="field">
           <label class="field-label">Назови условие после которого ты позволишь себе одеваться / выглядеть / появляться так как хочешь.</label>
-          <input required type="text" name="c3_condition" placeholder="Когда...">
+          <input type="text" name="c3_condition" placeholder="Когда...">
         </div>
         <div class="field">
           <label class="field-label">Сколько лет ты уже ждёшь этого момента?</label>
-          <input required type="text" name="c3_years" placeholder="Напиши цифру или «не считала»">
+          <input type="text" name="c3_years" placeholder="Напиши цифру или «не считала»">
         </div>
         <div class="field">
           <label class="field-label">Какие части тела ты прячешь в одежде каждый день? Выбери все.</label>
@@ -835,15 +835,15 @@
         </div>
         <div class="field">
           <label class="field-label">Опиши образ в котором чувствуешь себя лучше всего — даже если никогда не надеваешь его.</label>
-          <textarea required name="c3_dream" placeholder="Ткань, цвет, силуэт, детали..."></textarea>
+          <textarea name="c3_dream" placeholder="Ткань, цвет, силуэт, детали..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Назови одну вещь или образ который хочешь прямо сейчас но запрещаешь себе.</label>
-          <textarea required name="c3_want" placeholder="Будь честна..."></textarea>
+          <textarea name="c3_want" placeholder="Будь честна..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Закончи фразу: «Моё тело мешает мне...»</label>
-          <input required type="text" name="c3_bodyBlocks" placeholder="...">
+          <input type="text" name="c3_bodyBlocks" placeholder="...">
         </div>
       </div>
     </div>
@@ -861,13 +861,13 @@
 
         <div class="field">
           <label class="field-label">В каких конкретных ситуациях ты хочешь стать невидимой? Назови три.</label>
-          <input required type="text" name="c4_sit1" placeholder="Ситуация 1" style="margin-bottom:8px">
-          <input required type="text" name="c4_sit2" placeholder="Ситуация 2" style="margin-bottom:8px">
-          <input required type="text" name="c4_sit3" placeholder="Ситуация 3">
+          <input type="text" name="c4_sit1" placeholder="Ситуация 1" style="margin-bottom:8px">
+          <input type="text" name="c4_sit2" placeholder="Ситуация 2" style="margin-bottom:8px">
+          <input type="text" name="c4_sit3" placeholder="Ситуация 3">
         </div>
         <div class="field">
           <label class="field-label">Что самое страшное случится если тебя заметят? Напиши первое что пришло — без редактуры.</label>
-          <textarea required name="c4_fear" placeholder="Первый образ..."></textarea>
+          <textarea name="c4_fear" placeholder="Первый образ..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Как одеваешься чтобы не выделяться? Выбери всё что есть.</label>
@@ -883,9 +883,9 @@
         <div class="field">
           <label class="field-label">Три цвета которые носишь прямо сейчас</label>
           <div class="color-triplet">
-            <input required type="text" name="c4_color1" placeholder="Цвет 1">
-            <input required type="text" name="c4_color2" placeholder="Цвет 2">
-            <input required type="text" name="c4_color3" placeholder="Цвет 3">
+            <input type="text" name="c4_color1" placeholder="Цвет 1">
+            <input type="text" name="c4_color2" placeholder="Цвет 2">
+            <input type="text" name="c4_color3" placeholder="Цвет 3">
           </div>
         </div>
         <div class="field">
@@ -899,11 +899,11 @@
         </div>
         <div class="field">
           <label class="field-label">Если бы никто никогда тебя не увидел — как бы ты оделась завтра? Без цензуры.</label>
-          <textarea required name="c4_dream" placeholder="Образ мечты без ограничений..."></textarea>
+          <textarea name="c4_dream" placeholder="Образ мечты без ограничений..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Было ли время когда ты легко занимала пространство? Что изменилось?</label>
-          <textarea required name="c4_before" placeholder="Когда это было и что произошло..."></textarea>
+          <textarea name="c4_before" placeholder="Когда это было и что произошло..."></textarea>
         </div>
         <div class="field">
           <label class="field-label">Насколько намеренно ты делаешь себя незаметной прямо сейчас?</label>
@@ -916,7 +916,7 @@
         </div>
         <div class="field">
           <label class="field-label">Закончи фразу: «Я позволю себе быть заметной когда...»</label>
-          <input required type="text" name="c4_when" placeholder="Когда...">
+          <input type="text" name="c4_when" placeholder="Когда...">
         </div>
       </div>
     </div>
@@ -927,18 +927,18 @@
 
       <div class="field">
         <label class="field-label">Было ли у тебя раньше что-то похожее на трансформационную работу — коучинг, психология, телесные практики? Что это было и что дало?</label>
-        <textarea required name="prevWork" placeholder="Опиши опыт..."></textarea>
+        <textarea name="prevWork" placeholder="Опиши опыт..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Есть ли что-то важное о себе что ты хочешь чтобы я знала до нашей первой встречи?</label>
-        <textarea required name="important" placeholder="Всё что считаешь нужным..."></textarea>
+        <textarea name="important" placeholder="Всё что считаешь нужным..."></textarea>
       </div>
 
       <div class="field">
         <label class="field-label" style="margin-bottom:12px">Согласие на участие <span class="req">*</span></label>
         <div class="consent-block">
-          <input type="checkbox" name="consent1" id="consent1" required>
+          <input type="checkbox" required name="consent1" id="consent1" required>
           <p>Я подтверждаю что дала согласие на участие в фокус-группе и на использование материалов моей трансформации. Виктория обязуется использовать мою историю максимально точно и с уважением к моей личности.</p>
         </div>
       </div>
@@ -946,8 +946,8 @@
       <div class="field">
         <label class="field-label" style="margin-bottom:12px">Использование материалов до/после <span class="req">*</span></label>
         <div class="options">
-          <label class="opt"><input type="radio" name="consent2" value="with_name" required><span>Даю согласие на использование материалов <strong>с моим именем</strong>. Доверяю Виктории использовать их точно и с уважением.</span></label>
-          <label class="opt"><input type="radio" name="consent2" value="anonymous"><span>Даю согласие на использование материалов <strong>анонимно</strong>.</span></label>
+          <label class="opt"><input type="radio" required name="consent2" value="with_name" required><span>Даю согласие на использование материалов <strong>с моим именем</strong>. Доверяю Виктории использовать их точно и с уважением.</span></label>
+          <label class="opt"><input type="radio" required name="consent2" value="anonymous"><span>Даю согласие на использование материалов <strong>анонимно</strong>.</span></label>
         </div>
       </div>
     </div>
@@ -1001,40 +1001,9 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5JLL3po_XxbH-xDv78
 function handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
+  const btn = form.querySelector('.submit-btn');
 
-  // Custom validation
-  const requiredFields = form.querySelectorAll('[required]');
-  let firstInvalid = null;
-  let hasError = false;
-
-  requiredFields.forEach(el => {
-    const isRadioGroup = el.type === 'radio';
-    if (isRadioGroup) {
-      const group = form.querySelectorAll(`[name="${el.name}"]:checked`);
-      if (group.length === 0) {
-        hasError = true;
-        if (!firstInvalid) firstInvalid = el;
-        el.closest('.options, .cat-grid') && el.closest('.options, .cat-grid').style.setProperty('outline', '2px solid var(--cat1)', 'important');
-      }
-    } else if (el.type === 'checkbox' && el.required && !el.checked) {
-      hasError = true;
-      if (!firstInvalid) firstInvalid = el;
-      el.closest('.consent-block').style.outline = '2px solid var(--cat1)';
-    } else if (!isRadioGroup && !el.value.trim()) {
-      hasError = true;
-      if (!firstInvalid) firstInvalid = el;
-      el.style.borderColor = 'var(--cat1)';
-    }
-  });
-
-  if (hasError) {
-    if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const btn = form.querySelector('.submit-btn');
-    btn.textContent = 'Заполни все обязательные поля →';
-    setTimeout(() => { btn.textContent = 'Отправить анкету →'; }, 3000);
-    return;
-  }
-
+  // Collect all data
   const data = new FormData(form);
   const obj = {};
   for (let [k, v] of data.entries()) {
@@ -1046,16 +1015,18 @@ function handleSubmit(e) {
   }
 
   // Show sending state
-  const btn = form.querySelector('.submit-btn');
   if (btn) { btn.textContent = 'Отправляю...'; btn.disabled = true; }
 
-  // Build GET params — flatten arrays with comma
+  // Build GET params
   const params = new URLSearchParams();
-  params.set('participant', (obj.firstName || '') + ' ' + (obj.lastName || ''));
   params.set('section', 'QUESTIONNAIRE');
+  params.set('firstName', obj.firstName || '');
+  params.set('lastName', obj.lastName || '');
   Object.entries(obj).forEach(([k, v]) => {
-    params.set(k, Array.isArray(v) ? v.join(', ') : v);
+    params.set(k, Array.isArray(v) ? v.join(', ') : String(v));
   });
+
+  const fullURL = SCRIPT_URL + '?' + params.toString();
 
   // Send via image trick (bypasses CORS)
   const img = new Image();
@@ -1072,7 +1043,7 @@ function handleSubmit(e) {
       </div>
     `;
   };
-  img.src = SCRIPT_URL + '?' + params.toString();
+  img.src = fullURL;
 }
 
 document.querySelectorAll('input, textarea').forEach(el => {
